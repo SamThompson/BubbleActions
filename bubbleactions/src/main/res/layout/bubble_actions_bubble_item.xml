@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/bubble_actions_item_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="8dp"
+        android:alpha="0"
+        android:background="@drawable/bubble_actions_item_name"
+        android:gravity="center"
+        android:maxLength="10"
+        android:maxLines="1"
+        android:paddingBottom="2dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingTop="2dp"
+        android:textColor="@color/bubble_actions_text_color"
+        android:visibility="invisible" />
+
+    <ImageView
+        android:id="@+id/bubble_actions_item_icon"
+        android:layout_width="@dimen/bubble_actions_bubble_dimension"
+        android:layout_height="@dimen/bubble_actions_bubble_dimension"
+        android:layout_gravity="center" />
+
+</merge>

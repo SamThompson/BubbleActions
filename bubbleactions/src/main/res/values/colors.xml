@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="bubble_actions_light_gray">#88ffffff</color>
+    <color name="bubble_actions_background_transparent">#00000000</color>
+    <color name="bubble_actions_background_darkened">#77000000</color>
+    <color name="bubble_actions_text_background">#aa000000</color>
+    <color name="bubble_actions_text_color">#eeffffff</color>
+</resources>
