@@ -1,6 +1,6 @@
-#BubbleActions
+#bubble-actions
 
-Inspired by the Pinterest Android app, BubbleActions make it easy to perform actions 
+Inspired by the Pinterest Android app, `bubble-actions` make it easy to perform actions 
 on ui elements by simply dragging your finger.
 
 ##Screenshots
@@ -16,9 +16,9 @@ Coming soon
 
 ##Samples
 
-####Building BubbleActions
-BubbleActions are built using a [fluent interface](https://en.wikipedia.org/wiki/Fluent_interface) 
-(similar to SnackBar) and supports adding up to 5 actions. You can build BubbleActions like this:
+####Building bubble-actions
+`bubble-actions` are built using a [fluent interface](https://en.wikipedia.org/wiki/Fluent_interface) 
+(similar to SnackBar) and supports adding up to 5 actions. You can build `bubble-actions` like this:
 ```java
 BubbleActions.on(myView)                                                                              // Note 1
         .addAction("Star", R.drawable.ic_star, R.drawable.popup_item, new BubbleAction.Callback() {   // Note 2
@@ -30,7 +30,7 @@ BubbleActions.on(myView)                                                        
         ... add more actions ...
         .show();                                                                                      // Note 4
 ```
-1. We start off by declaring that we want BubbleActions on `myView`. Behind the scenes, the `BubbleActions` class crawls
+1. We start off by declaring that we want `bubble-actions` on `myView`. Behind the scenes, the `BubbleActions` class crawls
 up the view hierarchy starting at this view to find a `BubbleActionLayout` that it can set actions 
 to. If it doesn't find one, it throws an `IllegalStateException`.
 2. We add an action. Each action consists of a label, a foreground drawable/drawable resource id, a background 
@@ -39,9 +39,9 @@ the background drawable controls the shape of the background and how it reacts t
 determines what text is displayed above the bubble.
 3. When the user lifts their finger while over a bubble, the cooresponding callback is fired. 
 This always happens on the main thread.
-4. Show the BubbleActions by calling the `show()` method. Unlike SnackBar, this method is not thread safe, so attempting
-to show BubbleActions from a separate thread may lead to unexpected results. You do not necessarily have to show the 
-BubbleActions immediately; the `BubbleActions` object can be stored for later use. The actions will remain visible as 
+4. Show the `bubble-actions` by calling the `show()` method. Unlike SnackBar, this method is not thread safe, so attempting
+to show `bubble-actions` from a separate thread may lead to unexpected results. You do not necessarily have to show the 
+`bubble-actions` immediately; the `BubbleActions` object can be stored for later use. The actions will remain visible as 
 long as the user's finger is pressed to the screen.
 
 ####Basic example
@@ -62,7 +62,7 @@ In the activity content view
 </com.sam.bubbleactions.BubbleActionLayout>
 ```
 
-In the activity we set a long click listener to show the BubbleActions:
+In the activity we set a long click listener to show the `bubble-actions`:
 ```java
 findViewById(R.id.my_view).setOnLongClickListener(new View.OnLongClickListener() {
         @Override
@@ -162,7 +162,7 @@ bubbleActionLayout.setLabelTypeface(myFancyTypeface)
 
 ####Changing the indicator
 The default indicator is a semi-transparent circle that appears where the last down touch event occurred before
-showing the BubbleActions. You can change this indicator when you build the BubbleActions:
+showing the `bubble-actions`. You can change this indicator when you build the `bubble-actions`:
 ```
 BubbleActions.on(myView, R.drawable.my_fancy_indicator)
     ... add actions ...
