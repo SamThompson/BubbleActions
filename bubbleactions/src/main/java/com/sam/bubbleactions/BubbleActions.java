@@ -14,12 +14,18 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
- * Created by sam on 10/30/15.
+ * Inspired by the Pinterest Android app, BubbleActions make it easy to perform actions on ui
+ * elements by simply dragging your finger. BubbleActions uses a fluent interface to build and show
+ * actions similar to SnackBar or AlertDialog.
  */
 public class BubbleActions {
 
     private static final String TAG = BubbleActions.class.getSimpleName();
 
+    /**
+     * A {@link Callback#doAction()} call cooresponding to a particular action is invoked on the
+     * main thread when the user lifts their finger from the screen while on top of the action.
+     */
     public interface Callback {
         void doAction();
     }
@@ -54,33 +60,35 @@ public class BubbleActions {
     }
 
     /**
-     * Open up bubble actions on a view, using the default indicator. Using Bubble actions requires
-     * the view to have {@link BubbleActionLayout} as a parent.
+     * Opens up BubbleActions on the view argument.
      *
-     * @param view
-     * @return
+     * @param view the view that the BubbleActions are contextually connected to. The
+     *             view must have a root view.
+     * @return a BubbleActions instance
      */
     public static BubbleActions on(View view) {
         return on(view, R.drawable.bubble_actions_indicator);
     }
 
     /**
-     * Open up bubble actions on a view, using the specified resource as the indicator.
+     * Open up BubbleActions on a view using the specified resource id as the indicator.
      *
-     * @param view
+     * @param view the view that the BubbleActions are contextually connected to. The
+     *             view must have a root view.
      * @param indicatorRes indicator resource id
-     * @return
+     * @return a BubbleActions instance
      */
     public static BubbleActions on(View view, int indicatorRes) {
         return on(view, ResourcesCompat.getDrawable(view.getResources(), indicatorRes, view.getContext().getTheme()));
     }
 
     /**
-     * Open up bubble actions on a view, using the specified drawable as the indicator.
+     * Open up BubbleActions on a view, using the specified drawable as the indicator.
      *
-     * @param view
+     * @param view the view that the BubbleActions are contextually connected to. The
+     *             view must have a root view.
      * @param indicator indicator drawable
-     * @return
+     * @return a BubbleActions instance
      */
     public static BubbleActions on(View view, Drawable indicator) {
         View rootView = view.getRootView();
@@ -96,6 +104,12 @@ public class BubbleActions {
         return new BubbleActions((ViewGroup) rootView, indicator);
     }
 
+    /**
+     * Set the typeface of the labels for the BubbleActions.
+     *
+     * @param typeface the typeface to set on the labels
+     * @return the BubbleActions instance that called this method
+     */
     public BubbleActions withTypeface(Typeface typeface) {
         overlay.setLabelTypeface(typeface);
         return this;
@@ -110,7 +124,7 @@ public class BubbleActions {
      *
      * @param foregroundRes The content of the bubble action
      * @param backgroundRes The background of the bubble action used to determine shadow
-     * @return
+     * @return the BubbleActions instance that called this method
      */
     public BubbleActions addAction(CharSequence actionName, int foregroundRes, int backgroundRes, Callback callback) {
         Resources resources = root.getResources();
@@ -125,6 +139,7 @@ public class BubbleActions {
      *
      * @param foreground The content of the bubble action
      * @param background The background of the bubble action used to determine shadow
+     * @return the BubbleActions instance that called this method
      */
     public void addAction(CharSequence actionName, Drawable foreground, Drawable background, Callback callback) {
         if (numActions >= actions.length) {
@@ -148,7 +163,10 @@ public class BubbleActions {
     }
 
     /**
-     * Show the bubble actions.
+     * Show the bubble actions. Internally this will do 3 things:
+     *      1. Add the overlay to the root view
+     *      2. Use reflection to get the last touched xy location
+     *      3. Animate the overlay in
      */
     public void show() {
         if (overlay.getParent() == null) {
