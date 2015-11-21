@@ -14,6 +14,7 @@ import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.OvershootInterpolator;
 import android.widget.FrameLayout;
 
 /**
@@ -51,12 +52,14 @@ class BubbleActionOverlay extends FrameLayout {
 
     private static final String TAG = BubbleActionOverlay.class.getSimpleName();
 
+    private static final float OVERSHOOT_TENSION = 1.5f;
     private static final int ANIMATION_DURATION = 150;
 
     private float[] actionStartX = new float[MAX_ACTIONS];
     private float[] actionStartY = new float[MAX_ACTIONS];
     private float[] actionEndX = new float[MAX_ACTIONS];
     private float[] actionEndY = new float[MAX_ACTIONS];
+    private OvershootInterpolator overshootInterpolator;
     private ClipData dragData;
     private DragShadowBuilder dragShadowBuilder;
     private float startActionDistanceFromCenter;
@@ -76,9 +79,10 @@ class BubbleActionOverlay extends FrameLayout {
 
         LayoutInflater inflater = LayoutInflater.from(context);
         bubbleActionIndicator = inflater.inflate(R.layout.bubble_actions_indicator, this, false);
-        bubbleActionIndicator.setVisibility(INVISIBLE);
         bubbleActionIndicator.setAlpha(0f);
         addView(bubbleActionIndicator, -1);
+
+        overshootInterpolator = new OvershootInterpolator(OVERSHOOT_TENSION);
 
         Resources resources = getResources();
 
@@ -112,7 +116,7 @@ class BubbleActionOverlay extends FrameLayout {
         }
     }
 
-    void showOverlay(float originX, float originY, BubbleActions bubbleActions) {
+    void setupOverlay(float originX, float originY, BubbleActions bubbleActions) {
         numActions = bubbleActions.numActions;
         if (numActions > MAX_ACTIONS) {
             throw new IllegalArgumentException(TAG + ": actions cannot have more than " + MAX_ACTIONS + " actions. ");
@@ -177,37 +181,47 @@ class BubbleActionOverlay extends FrameLayout {
             actionIndex++;
         }
 
+    }
+
+    void showOverlay() {
         startDrag(dragData, dragShadowBuilder, null, 0);
     }
 
-    /**
-     * Do the animating to show the bubble actions.
-     */
-    private void animateIn() {
-        if (!overlayActive) {
-            overlayActive = true;
-            backgroundAnimator.start();
-            bubbleActionIndicator.setVisibility(VISIBLE);
-            ViewCompat.animate(bubbleActionIndicator)
-                    .alpha(1f)
-                    .setDuration(ANIMATION_DURATION)
-                    .setListener(new ViewPropertyAnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationStart(View view) {
-                            super.onAnimationStart(view);
-                            for (int i = 0; i < numActions; i++) {
-                                final BubbleView child = (BubbleView) getChildAt(i + 1);
-                                child.animateIn(actionEndX[i], actionEndY[i]);
-                            }
-                        }
-                    });
+    boolean dragStarted(DragEvent event) {
+        if (event.getClipDescription().getLabel().equals(TAG)) {
+            if (!overlayActive) {
+                overlayActive = true;
+                backgroundAnimator.start();
+                ViewCompat.animate(bubbleActionIndicator)
+                        .alpha(1f)
+                        .setDuration(ANIMATION_DURATION)
+                        .setListener(null);
+
+                for (int i = 0; i < numActions; i++) {
+                    final BubbleView child = (BubbleView) getChildAt(i + 1);
+                    child.setVisibility(VISIBLE);
+                    ViewCompat.animate(child)
+                            .translationX(actionEndX[i])
+                            .translationY(actionEndY[i])
+                            .alpha(1f)
+                            .setInterpolator(overshootInterpolator)
+                            .setListener(new ViewPropertyAnimatorListenerAdapter() {
+                                @Override
+                                public void onAnimationEnd(View view) {
+                                    super.onAnimationEnd(view);
+                                    child.animatedIn = true;
+                                }
+                            })
+                            .setDuration(ANIMATION_DURATION);
+                }
+            }
+            return true;
         }
+
+        return false;
     }
 
-    /**
-     * Do the animating to hide the bubble actions.
-     */
-    private void animateOut() {
+    boolean dragEnded(final BubbleActions bubbleActions) {
         if (overlayActive) {
             overlayActive = false;
             ViewCompat.animate(bubbleActionIndicator)
@@ -217,57 +231,36 @@ class BubbleActionOverlay extends FrameLayout {
                         @Override
                         public void onAnimationStart(View view) {
                             super.onAnimationStart(view);
-                            for (int i = 0; i < numActions; i++) {
-                                final BubbleView child = (BubbleView) getChildAt(i + 1);
-                                child.animateOut(actionStartX[i], actionStartY[i]);
-                            }
                         }
 
                         @Override
                         public void onAnimationEnd(View view) {
                             super.onAnimationEnd(view);
-                            bubbleActionIndicator.setVisibility(INVISIBLE);
-                            backgroundAnimator.reverse();
+                            bubbleActions.hideOverlay();
                         }
                     });
+
+            for (int i = 0; i < numActions; i++) {
+                final BubbleView child = (BubbleView) getChildAt(i + 1);
+                ViewCompat.animate(child)
+                        .translationX(actionStartX[i])
+                        .translationY(actionStartY[i])
+                        .alpha(0f)
+                        .setInterpolator(null)
+                        .setListener(new ViewPropertyAnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationEnd(View view) {
+                                super.onAnimationEnd(view);
+                                child.setVisibility(INVISIBLE);
+                                child.resetChildren();
+                                child.animatedIn = false;
+                            }
+                        })
+                        .setDuration(ANIMATION_DURATION);
+            }
+            backgroundAnimator.reverse();
         }
+        return true;
     }
 
-    /**
-     * There can be a lot of drag events flying around, so we want to make sure that we are
-     * processing the right ones.
-     *
-     * @param event
-     * @return
-     */
-    private static boolean isDragEventForOverlay(DragEvent event) {
-        return event.getClipDescription().getLabel().equals(TAG);
-    }
-
-    /**
-     * When we get the correct type of drag event, show the overlay when the drag starts.
-     * When we receive the drag end event, hide the overlay if it is currently showing.
-     *
-     * @param event
-     * @return
-     */
-    @Override
-    public boolean onDragEvent(DragEvent event) {
-        final int action = event.getAction();
-
-        switch (action) {
-            case DragEvent.ACTION_DRAG_STARTED:
-                if (isDragEventForOverlay(event)) {
-                    animateIn();
-                    return true;
-                }
-
-                return false;
-            case DragEvent.ACTION_DRAG_ENDED:
-                animateOut();
-                return true;
-        }
-
-        return false;
-    }
 }
