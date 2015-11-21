@@ -1,10 +1,17 @@
 package com.sam.bubbleactions;
 
 import android.content.res.Resources;
+import android.graphics.Point;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.res.ResourcesCompat;
+import android.support.v4.view.ViewCompat;
+import android.view.DragEvent;
 import android.view.View;
-import android.view.ViewParent;
+import android.view.ViewGroup;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 /**
  * Created by sam on 10/30/15.
@@ -17,35 +24,33 @@ public class BubbleActions {
         void doAction();
     }
 
+    private ViewGroup root;
+    private BubbleActionOverlay overlay;
+    private Method getLastTouchPoint;
+    private Object viewRootImpl;
+    private Point touchPoint = new Point();
     Action[] actions = new Action[BubbleActionOverlay.MAX_ACTIONS];
     int numActions = 0;
     Drawable indicator;
-    BubbleActionLayout bubbleActionLayout;
 
-    /**
-     * Use the builder methods.
-     * @param bubbleActionLayout
-     */
-    private BubbleActions(BubbleActionLayout bubbleActionLayout) {
-        this.bubbleActionLayout = bubbleActionLayout;
-    }
+    private BubbleActions(ViewGroup root, Drawable indicator) {
+        this.indicator = indicator;
+        this.root = root;
+        overlay = new BubbleActionOverlay(root.getContext());
+        overlay.setOnDragListener(overlayDragListener);
 
-    /**
-     * Find the {@link BubbleActionLayout} by traversing up the view hierarchy.
-     * @param view Our starting point in the crawl up the view hierarchy
-     * @return the {@link BubbleActionLayout} above the view in the view hierarchy
-     */
-    public static BubbleActionLayout findBubbleActionLayout(View view) {
-        while (view != null) {
-            if (view instanceof BubbleActionLayout) {
-                return (BubbleActionLayout) view;
-            }
-
-            ViewParent parent = view.getParent();
-            view = parent instanceof View ? (View) parent : null;
+        // Use reflection to get the ViewRootImpl
+        try {
+            Method method = root.getClass().getMethod("getViewRootImpl");
+            viewRootImpl = method.invoke(root);
+            getLastTouchPoint = viewRootImpl.getClass().getMethod("getLastTouchPoint", Point.class);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
         }
-
-        throw new IllegalStateException(TAG + ": must be a descendant of a " + BubbleActionLayout.class.getSimpleName() + ".");
     }
 
     /**
@@ -78,9 +83,22 @@ public class BubbleActions {
      * @return
      */
     public static BubbleActions on(View view, Drawable indicator) {
-        BubbleActions actions = new BubbleActions(findBubbleActionLayout(view));
-        actions.indicator = indicator;
-        return actions;
+        View rootView = view.getRootView();
+        if (rootView == null) {
+            throw new IllegalArgumentException("View argument must have a root view.");
+        }
+
+        if (!(rootView instanceof ViewGroup)) {
+            throw new IllegalArgumentException("View argument must have a ViewGroup root view");
+        }
+
+
+        return new BubbleActions((ViewGroup) rootView, indicator);
+    }
+
+    public BubbleActions withTypeface(Typeface typeface) {
+        overlay.setLabelTypeface(typeface);
+        return this;
     }
 
     /**
@@ -95,8 +113,8 @@ public class BubbleActions {
      * @return
      */
     public BubbleActions addAction(CharSequence actionName, int foregroundRes, int backgroundRes, Callback callback) {
-        Resources resources = bubbleActionLayout.getResources();
-        Resources.Theme theme = bubbleActionLayout.getContext().getTheme();
+        Resources resources = root.getResources();
+        Resources.Theme theme = root.getContext().getTheme();
         addAction(actionName, ResourcesCompat.getDrawable(resources, foregroundRes, theme), ResourcesCompat.getDrawable(resources, backgroundRes, theme), callback);
         return this;
     }
@@ -130,15 +148,61 @@ public class BubbleActions {
     }
 
     /**
-     * Show the bubble actions. Unlike the show method for SnackBar, this method is not thread safe.
+     * Show the bubble actions.
      */
     public void show() {
-        if (bubbleActionLayout == null) {
-            throw new IllegalStateException(TAG + ": trying to show bubble actions when not a descendant of a BubbleActionLayout.");
+        if (overlay.getParent() == null) {
+            root.addView(overlay);
         }
 
-        bubbleActionLayout.showOverlay(this);
+        if (ViewCompat.isLaidOut(overlay)) {
+            setupAndShow();
+        } else {
+            overlay.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+                @Override
+                public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                    setupAndShow();
+                    overlay.removeOnLayoutChangeListener(this);
+                }
+            });
+        }
     }
+
+    private void setupAndShow() {
+        // use reflection to get the last touched xy location
+        try {
+            getLastTouchPoint.invoke(viewRootImpl, touchPoint);
+            overlay.setupOverlay(touchPoint.x, touchPoint.y, this);
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+            return;
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        overlay.showOverlay();
+    }
+
+    void hideOverlay() {
+        root.removeView(overlay);
+    }
+
+    private View.OnDragListener overlayDragListener = new View.OnDragListener() {
+        @Override
+        public boolean onDrag(View v, DragEvent event) {
+            final int action = event.getAction();
+
+            switch (action) {
+                case DragEvent.ACTION_DRAG_STARTED:
+                    return overlay.dragStarted(event);
+                case DragEvent.ACTION_DRAG_ENDED:
+                    return overlay.dragEnded(BubbleActions.this);
+            }
+
+            return false;
+        }
+    };
 
     /**
      * An abstraction of the bubble action. Each action has a foreground and a background drawable,

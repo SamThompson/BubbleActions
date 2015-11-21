@@ -6,7 +6,6 @@ import android.support.v4.view.ViewPropertyAnimatorListenerAdapter;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.animation.OvershootInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -23,10 +22,7 @@ class BubbleView extends LinearLayout {
 
     private static final int ANIMATION_DURATION = 150;
 
-    private static final float OVERSHOOT_TENSION = 1.5f;
-
-    private boolean animatedIn = false;
-    private OvershootInterpolator overshootInterpolator;
+    boolean animatedIn = false;
     BubbleActions.Callback callback;
     TextView textView;
     ImageView imageView;
@@ -34,7 +30,6 @@ class BubbleView extends LinearLayout {
     public BubbleView(Context context) {
         super(context);
 
-        overshootInterpolator = new OvershootInterpolator(OVERSHOOT_TENSION);
         setOrientation(VERTICAL);
         LayoutInflater.from(context).inflate(R.layout.bubble_actions_bubble_item, this, true);
         textView = (TextView) getChildAt(0);
@@ -44,42 +39,11 @@ class BubbleView extends LinearLayout {
         imageView.setScaleY(DESELECTED_SCALE);
     }
 
-    void animateIn(float endX, float endY) {
-        setVisibility(VISIBLE);
-        ViewCompat.animate(this)
-                .translationX(endX)
-                .translationY(endY)
-                .alpha(1f)
-                .setInterpolator(overshootInterpolator)
-                .setListener(new ViewPropertyAnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(View view) {
-                        super.onAnimationEnd(view);
-                        animatedIn = true;
-                    }
-                })
-                .setDuration(ANIMATION_DURATION);
-    }
-
-    void animateOut(float startX, float startY) {
-        ViewCompat.animate(this)
-                .translationX(startX)
-                .translationY(startY)
-                .alpha(0f)
-                .setInterpolator(null)
-                .setListener(new ViewPropertyAnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(View view) {
-                        super.onAnimationEnd(view);
-                        setVisibility(INVISIBLE);
-                        imageView.setScaleX(DESELECTED_SCALE);
-                        imageView.setScaleY(DESELECTED_SCALE);
-                        imageView.setSelected(false);
-                        textView.setVisibility(INVISIBLE);
-                        animatedIn = false;
-                    }
-                })
-                .setDuration(ANIMATION_DURATION);
+    void resetChildren() {
+        imageView.setScaleX(DESELECTED_SCALE);
+        imageView.setScaleY(DESELECTED_SCALE);
+        imageView.setSelected(false);
+        textView.setVisibility(INVISIBLE);
     }
 
     /**
