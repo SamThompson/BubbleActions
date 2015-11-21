@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="oval">
-    <stroke android:color="@color/bubble_actions_light_gray"
-        android:width="2dp" />
+    <stroke
+        android:width="3dp"
+        android:color="@color/bubble_actions_light_gray" />
+    <solid android:color="@android:color/transparent" />
 </shape>
