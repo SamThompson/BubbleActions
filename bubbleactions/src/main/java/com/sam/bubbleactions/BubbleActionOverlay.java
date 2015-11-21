@@ -112,36 +112,6 @@ class BubbleActionOverlay extends FrameLayout {
         }
     }
 
-    /**
-     * @param bubbleActions
-     */
-    void setBubbleActions(BubbleActions bubbleActions) {
-        numActions = bubbleActions.numActions;
-        if (numActions > MAX_ACTIONS) {
-            throw new IllegalArgumentException(TAG + ": actions cannot have more than " + MAX_ACTIONS + " actions. ");
-        }
-
-        if (bubbleActions.indicator != null) {
-            bubbleActionIndicator.setBackground(bubbleActions.indicator);
-        } else {
-            bubbleActionIndicator.setBackgroundResource(R.drawable.bubble_actions_indicator);
-        }
-
-        int children = getChildCount();
-        for (int i = 1; i < children; i++) {
-            BubbleView itemView = (BubbleView) getChildAt(i);
-            if (i - 1 < numActions) {
-                BubbleActions.Action action = bubbleActions.actions[i - 1];
-                itemView.textView.setText(action.actionName);
-                itemView.imageView.setImageDrawable(action.foregroundDrawable);
-                itemView.imageView.setBackground(action.backgroundDrawable);
-                itemView.callback = action.callback;
-            } else {
-                itemView.setVisibility(INVISIBLE);
-            }
-        }
-    }
-
     void showOverlay(float originX, float originY, BubbleActions bubbleActions) {
         numActions = bubbleActions.numActions;
         if (numActions > MAX_ACTIONS) {
