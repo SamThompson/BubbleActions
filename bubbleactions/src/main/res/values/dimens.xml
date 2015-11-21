@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="bubble_actions_indicator_dimension">48dp</dimen>
-    <dimen name="bubble_actions_bubble_dimension">56dp</dimen>
+    <dimen name="bubble_actions_bubble_dimension">52dp</dimen>
     <dimen name="bubble_actions_start_distance">0dp</dimen>
-    <dimen name="bubble_actions_stop_distance">104dp</dimen>
+    <dimen name="bubble_actions_stop_distance">96dp</dimen>
 </resources>
