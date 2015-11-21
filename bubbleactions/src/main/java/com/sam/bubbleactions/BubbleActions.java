@@ -141,7 +141,7 @@ public class BubbleActions {
      * @param background The background of the bubble action used to determine shadow
      * @return the BubbleActions instance that called this method
      */
-    public void addAction(CharSequence actionName, Drawable foreground, Drawable background, Callback callback) {
+    public BubbleActions addAction(CharSequence actionName, Drawable foreground, Drawable background, Callback callback) {
         if (numActions >= actions.length) {
             throw new IllegalStateException(TAG + ": cannot add more than " + BubbleActionOverlay.MAX_ACTIONS + " actions.");
         }
@@ -160,6 +160,8 @@ public class BubbleActions {
 
         actions[numActions] = new Action(actionName, foreground, background, callback);
         numActions++;
+
+        return this;
     }
 
     /**
