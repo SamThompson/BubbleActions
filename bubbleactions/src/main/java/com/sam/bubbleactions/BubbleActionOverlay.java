@@ -162,11 +162,15 @@ class BubbleActionOverlay extends FrameLayout {
         int delta = rightOk ? 1 : -1;
         for (int i = start; i != end; i += delta) {
             BubbleView bubbleView = (BubbleView) getChildAt(i + 1);
+
+            // Bind action specifics to BubbleView
             BubbleActions.Action action = bubbleActions.actions[actionIndex];
             bubbleView.textView.setText(action.actionName);
             bubbleView.imageView.setImageDrawable(action.foregroundDrawable);
             bubbleView.imageView.setBackground(action.backgroundDrawable);
             bubbleView.callback = action.callback;
+
+            // Calculate and set the locations of the BubbleView
             float halfWidth = bubbleView.getWidth() / 2.0f;
             float halfHeight = bubbleView.getHeight() / 2.0f;
             float cosAngle = (float) Math.cos(angle);
@@ -177,6 +181,7 @@ class BubbleActionOverlay extends FrameLayout {
             actionStartY[i] = originY + startActionDistanceFromCenter * sinAngle - halfHeight;
             bubbleView.setX(actionStartX[i]);
             bubbleView.setY(actionStartY[i]);
+
             angle += angleDelta;
             actionIndex++;
         }
