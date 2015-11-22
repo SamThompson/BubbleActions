@@ -67,7 +67,6 @@ public class BubbleActions {
      *
      * @param view the view that the BubbleActions are contextually connected to. The
      *             view must have a root view.
-     * @param indicator indicator drawable
      * @return a BubbleActions instance
      */
     public static BubbleActions on(View view) {
@@ -125,8 +124,10 @@ public class BubbleActions {
      * feedback. Check out the sample app for an example of this. Actions are not limited to
      * circles.
      *
+     * @param actionName The label displayed above the bubble action
      * @param foregroundRes The content of the bubble action
      * @param backgroundRes The background of the bubble action used to determine shadow
+     * @param callback A callback run on the main thread when the action is selected
      * @return the BubbleActions instance that called this method
      */
     public BubbleActions addAction(CharSequence actionName, int foregroundRes, int backgroundRes, Callback callback) {
@@ -140,8 +141,10 @@ public class BubbleActions {
      * Add an action using drawables. See the description at {@link #addAction(CharSequence, int, int, BubbleActions.Callback)} for
      * details.
      *
+     * @param actionName The label displayed above the bubble action
      * @param foreground The content of the bubble action
      * @param background The background of the bubble action used to determine shadow
+     * @param callback A callback run on the main thread when the action is selected
      * @return the BubbleActions instance that called this method
      */
     public BubbleActions addAction(CharSequence actionName, Drawable foreground, Drawable background, Callback callback) {
