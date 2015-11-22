@@ -35,6 +35,7 @@ public class BubbleActions {
     private Method getLastTouchPoint;
     private Object viewRootImpl;
     private Point touchPoint = new Point();
+    private boolean showing = false;
     Action[] actions = new Action[BubbleActionOverlay.MAX_ACTIONS];
     int numActions = 0;
     Drawable indicator;
@@ -171,6 +172,10 @@ public class BubbleActions {
      *      3. Animate the overlay in
      */
     public void show() {
+        if (showing) {
+            return;
+        }
+
         if (overlay.getParent() == null) {
             root.addView(overlay);
         }
@@ -201,10 +206,12 @@ public class BubbleActions {
             return;
         }
 
+        showing = true;
         overlay.showOverlay();
     }
 
     void hideOverlay() {
+        showing = false;
         root.removeView(overlay);
     }
 
