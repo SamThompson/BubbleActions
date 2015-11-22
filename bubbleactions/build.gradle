@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+apply plugin: 'bintray-release'
 
 android {
     compileSdkVersion 23
@@ -20,14 +21,20 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-
     // at some point write some tests
     testCompile 'junit:junit:4.12'
-    androidTestCompile 'com.android.support:support-annotations:23.1.1'
-    androidTestCompile 'com.android.support.test:runner:0.4.1'
-    androidTestCompile 'com.android.support.test:rules:0.4.1'
-    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.1'
 
     compile 'com.android.support:appcompat-v7:23.1.1'
+}
+
+publish {
+    userOrg = 'st028'
+    groupId = GROUP_NAME
+    artifactId = 'bubble-actions'
+    version = VERSION_NAME
+    description = 'An open source implementation of the long press actions as seen in the Pinterest app.'
+    website = SITE_URL
+    bintrayUser = BINTRAY_USER
+    bintrayKey = BINTRAY_KEY
+    licences = ['Apache-2.0']
 }
