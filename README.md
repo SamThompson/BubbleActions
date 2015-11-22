@@ -87,9 +87,10 @@ BubbleActions.on(myView).withTypeface(myFancyTypeface)
 
 ####Changing the indicator
 The default indicator is a semi-transparent circle that appears where the last down touch event occurred before
-showing the `BubbleActions`. You can change this indicator when you build the `BubbleActions`:
+showing the `BubbleActions`. You can change this indicator by using the `withIndicator` method 
+when you build your `BubbleActions`:
 ```
-BubbleActions.on(myView, R.drawable.my_fancy_indicator)
+BubbleActions.on(myView).withIndicator(R.drawable.my_fancy_indicator)
     // ... add actions ...
 ```
 

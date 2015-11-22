@@ -40,8 +40,8 @@ public class BubbleActions {
     int numActions = 0;
     Drawable indicator;
 
-    private BubbleActions(ViewGroup root, Drawable indicator) {
-        this.indicator = indicator;
+    private BubbleActions(ViewGroup root) {
+        this.indicator = ResourcesCompat.getDrawable(root.getResources(), R.drawable.bubble_actions_indicator, root.getContext().getTheme());
         this.root = root;
         overlay = new BubbleActionOverlay(root.getContext());
         overlay.setOnDragListener(overlayDragListener);
@@ -61,29 +61,6 @@ public class BubbleActions {
     }
 
     /**
-     * Opens up BubbleActions on the view argument.
-     *
-     * @param view the view that the BubbleActions are contextually connected to. The
-     *             view must have a root view.
-     * @return a BubbleActions instance
-     */
-    public static BubbleActions on(View view) {
-        return on(view, R.drawable.bubble_actions_indicator);
-    }
-
-    /**
-     * Open up BubbleActions on a view using the specified resource id as the indicator.
-     *
-     * @param view the view that the BubbleActions are contextually connected to. The
-     *             view must have a root view.
-     * @param indicatorRes indicator resource id
-     * @return a BubbleActions instance
-     */
-    public static BubbleActions on(View view, int indicatorRes) {
-        return on(view, ResourcesCompat.getDrawable(view.getResources(), indicatorRes, view.getContext().getTheme()));
-    }
-
-    /**
      * Open up BubbleActions on a view, using the specified drawable as the indicator.
      *
      * @param view the view that the BubbleActions are contextually connected to. The
@@ -91,7 +68,7 @@ public class BubbleActions {
      * @param indicator indicator drawable
      * @return a BubbleActions instance
      */
-    public static BubbleActions on(View view, Drawable indicator) {
+    public static BubbleActions on(View view) {
         View rootView = view.getRootView();
         if (rootView == null) {
             throw new IllegalArgumentException("View argument must have a root view.");
@@ -102,7 +79,7 @@ public class BubbleActions {
         }
 
 
-        return new BubbleActions((ViewGroup) rootView, indicator);
+        return new BubbleActions((ViewGroup) rootView);
     }
 
     /**
@@ -113,6 +90,29 @@ public class BubbleActions {
      */
     public BubbleActions withTypeface(Typeface typeface) {
         overlay.setLabelTypeface(typeface);
+        return this;
+    }
+
+    /**
+     * Set the indicator drawable. The default is a semi-transparent circle.
+     *
+     * @param indicatorRes drawable resource id to be drawn indicating what the bubble actions
+     *                     are acting on
+     * @return the BubbleActions instance that called this method
+     */
+    public BubbleActions withIndicator(int indicatorRes) {
+        this.indicator = ResourcesCompat.getDrawable(root.getResources(), indicatorRes, root.getContext().getTheme());
+        return this;
+    }
+
+    /**
+     * Set the indicator drawable. The default is a semi-transparent circle.
+     *
+     * @param indicator drawable to be drawn indicating what the bubble actions are acting on
+     * @return the BubbleActions instance that called this method
+     */
+    public BubbleActions withIndicator(Drawable indicator) {
+        this.indicator = indicator;
         return this;
     }
 
