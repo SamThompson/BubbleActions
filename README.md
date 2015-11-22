@@ -27,7 +27,7 @@ BubbleActions.on(myView)                                                        
                     Toast.makeText(v.getContext(), "Star pressed!", Toast.LENGTH_SHORT).show();
                 }
             })
-        ... add more actions ...
+        // ... add more actions ...
         .show();                                                                                      // Note 4
 ```
 1. We start off by declaring that we want `BubbleActions` on `myView`. Behind the scenes, the `BubbleActions` class uses
@@ -78,7 +78,8 @@ findViewById(R.id.my_view).setOnLongClickListener(new View.OnLongClickListener()
 Use a custom font? Have no fear! You can configure the typeface of the bubble actions by using `withTypeface` when
 you build your `BubbleActions`:
 ```
-BubbleActions.on(myView).withTypeface(myFancyTypeface);
+BubbleActions.on(myView).withTypeface(myFancyTypeface)
+    // ... add actions ...
 ```
 
 ####Changing the indicator
@@ -86,7 +87,7 @@ The default indicator is a semi-transparent circle that appears where the last d
 showing the `BubbleActions`. You can change this indicator when you build the `BubbleActions`:
 ```
 BubbleActions.on(myView, R.drawable.my_fancy_indicator)
-    ... add actions ...
+    // ... add actions ...
 ```
 
 
