@@ -8,14 +8,14 @@
         android:label="@string/bubble_actions_app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
-        <activity android:name=".MainActivity" >
+        <activity android:name="me.samthompson.bubbleactions_sample.MainActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".RecyclerViewActivity" >
+        <activity android:name="me.samthompson.bubbleactions_sample.RecyclerViewActivity" >
         </activity>
     </application>
 

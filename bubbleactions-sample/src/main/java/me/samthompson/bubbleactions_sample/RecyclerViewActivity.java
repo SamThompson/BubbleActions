@@ -1,4 +1,4 @@
-package com.sam.bubbleactions_sample;
+package me.samthompson.bubbleactions_sample;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -10,7 +10,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.sam.bubbleactions.BubbleActions;
+import com.sam.bubbleactions_sample.R;
+
+import me.samthompson.bubbleactions.BubbleActions;
 
 public class RecyclerViewActivity extends AppCompatActivity {
 

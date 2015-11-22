@@ -1,4 +1,4 @@
-package com.sam.bubbleactions;
+package me.samthompson.bubbleactions;
 
 import android.content.Context;
 import android.support.v4.view.ViewCompat;
@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.sam.bubbleactions.R;
 
 /**
  * Created by sam on 11/2/15.

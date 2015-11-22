@@ -1,9 +1,11 @@
-package com.sam.bubbleactions_sample;
+package me.samthompson.bubbleactions_sample;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+
+import com.sam.bubbleactions_sample.R;
 
 public class MainActivity extends AppCompatActivity {
 

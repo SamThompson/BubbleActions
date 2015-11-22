@@ -1,4 +1,4 @@
-package com.sam.bubbleactions;
+package me.samthompson.bubbleactions;
 
 import android.animation.ObjectAnimator;
 import android.animation.TypeEvaluator;
@@ -16,6 +16,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
 import android.widget.FrameLayout;
+
+import com.sam.bubbleactions.R;
 
 /**
  *

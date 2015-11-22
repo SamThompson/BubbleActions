@@ -1,4 +1,4 @@
-package com.sam.bubbleactions;
+package me.samthompson.bubbleactions;
 
 import android.content.res.Resources;
 import android.graphics.Point;
@@ -9,6 +9,8 @@ import android.support.v4.view.ViewCompat;
 import android.view.DragEvent;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.sam.bubbleactions.R;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -135,7 +137,7 @@ public class BubbleActions {
     }
 
     /**
-     * Add an action using drawables. See the description at {@link #addAction(CharSequence, int, int, com.sam.bubbleactions.BubbleActions.Callback)} for
+     * Add an action using drawables. See the description at {@link #addAction(CharSequence, int, int, BubbleActions.Callback)} for
      * details.
      *
      * @param foreground The content of the bubble action
