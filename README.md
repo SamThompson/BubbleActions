@@ -4,10 +4,13 @@ Inspired by the Pinterest Android app, `BubbleActions` make it easy to perform a
 on ui elements by simply dragging your finger.
 
 ##Screenshots
-
 1 | 2 | 3
 --- | --- | --- 
 ![1](http://i.imgur.com/jbI6Bay.gif) | ![2](http://i.imgur.com/YEtNBmn.gif)  | ![3](http://i.imgur.com/BKllyFY.gif)
+
+
+##Requirements and dependencies
+`BubbleActions` works with api level 16 and higher. It also is dependent on appcompat-v7.
 
 
 ##Gradle
