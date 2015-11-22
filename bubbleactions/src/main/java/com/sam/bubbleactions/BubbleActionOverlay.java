@@ -193,6 +193,12 @@ class BubbleActionOverlay extends FrameLayout {
     }
 
     boolean dragStarted(DragEvent event) {
+        // There is a bug in v17 and below where the text won't appear because it hasn't
+        // been measured properly
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            requestLayout();
+        }
+
         if (event.getClipDescription().getLabel().equals(TAG)) {
             if (!overlayActive) {
                 overlayActive = true;
