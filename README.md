@@ -1,4 +1,4 @@
-#BubbleActions
+#BubbleActions [![Build Status](https://travis-ci.org/SamThompson/BubbleActions.svg)](https://travis-ci.org/SamThompson/BubbleActions)
 
 Inspired by the Pinterest Android app, `BubbleActions` make it easy to perform actions 
 on ui elements by simply dragging your finger.
