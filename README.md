@@ -69,7 +69,7 @@ findViewById(R.id.my_view).setOnLongClickListener(new View.OnLongClickListener()
                     .addAction("Hide", R.drawable.ic_hide, R.drawable.popup_item, new BubbleActions.Callback() {
                         @Override
                         public void doAction() {
-                            Toast.makeText(v.getContext(), "Hide pressed on item!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(v.getContext(), "Hide pressed!", Toast.LENGTH_SHORT).show();
                         }
                     })
                     .show();
