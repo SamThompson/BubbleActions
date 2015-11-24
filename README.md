@@ -14,7 +14,9 @@ on ui elements by simply dragging your finger.
 
 
 ##Gradle
-Coming soon
+```groovy
+compile 'me.samthompson:bubble-actions:1.0.1'
+```
 
 
 ##Samples
