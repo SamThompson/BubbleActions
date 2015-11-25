@@ -58,19 +58,19 @@ public class RecyclerViewActivity extends AppCompatActivity {
                 @Override
                 public boolean onLongClick(final View v) {
                     BubbleActions.on(v)
-                            .addAction("Star", R.drawable.ic_star, R.drawable.popup_item, new BubbleActions.Callback() {
+                            .addAction("Star", R.drawable.bubble_star, new BubbleActions.Callback() {
                                 @Override
                                 public void doAction() {
                                     Toast.makeText(v.getContext(), "Star pressed on item " + item + "!", Toast.LENGTH_SHORT).show();
                                 }
                             })
-                            .addAction("Share", R.drawable.ic_share, R.drawable.popup_item, new BubbleActions.Callback() {
+                            .addAction("Share", R.drawable.bubble_share, new BubbleActions.Callback() {
                                 @Override
                                 public void doAction() {
                                     Toast.makeText(v.getContext(), "Share pressed on item " + item + "!", Toast.LENGTH_SHORT).show();
                                 }
                             })
-                            .addAction("Hide", R.drawable.ic_hide, R.drawable.popup_item, new BubbleActions.Callback() {
+                            .addAction("Hide", R.drawable.bubble_hide, new BubbleActions.Callback() {
                                 @Override
                                 public void doAction() {
                                     Toast.makeText(v.getContext(), "Hide pressed on item " + item + "!", Toast.LENGTH_SHORT).show();
