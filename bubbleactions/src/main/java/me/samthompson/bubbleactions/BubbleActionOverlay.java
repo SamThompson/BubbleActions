@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 
 import com.sam.bubbleactions.R;
 
@@ -68,7 +69,7 @@ class BubbleActionOverlay extends FrameLayout {
     private float stopActionDistanceFromCenter;
     private float bubbleDimension;
     private RectF contentClipRect;
-    private View bubbleActionIndicator;
+    private ImageView bubbleActionIndicator;
     private int numActions = 0;
     private boolean overlayActive = false;
     private ObjectAnimator backgroundAnimator;
@@ -80,7 +81,7 @@ class BubbleActionOverlay extends FrameLayout {
         dragData = new ClipData(TAG, new String[] {TAG}, new ClipData.Item(TAG));
 
         LayoutInflater inflater = LayoutInflater.from(context);
-        bubbleActionIndicator = inflater.inflate(R.layout.bubble_actions_indicator, this, false);
+        bubbleActionIndicator = (ImageView) inflater.inflate(R.layout.bubble_actions_indicator, this, false);
         bubbleActionIndicator.setAlpha(0f);
         addView(bubbleActionIndicator, -1);
 
@@ -125,9 +126,9 @@ class BubbleActionOverlay extends FrameLayout {
         }
 
         if (bubbleActions.indicator != null) {
-            bubbleActionIndicator.setBackground(bubbleActions.indicator);
+            bubbleActionIndicator.setImageDrawable(bubbleActions.indicator);
         } else {
-            bubbleActionIndicator.setBackgroundResource(R.drawable.bubble_actions_indicator);
+            bubbleActionIndicator.setImageResource(R.drawable.bubble_actions_indicator);
         }
 
         contentClipRect.set(0, 0, getWidth(), getHeight());
@@ -168,8 +169,7 @@ class BubbleActionOverlay extends FrameLayout {
             // Bind action specifics to BubbleView
             BubbleActions.Action action = bubbleActions.actions[actionIndex];
             bubbleView.textView.setText(action.actionName);
-            bubbleView.imageView.setImageDrawable(action.foregroundDrawable);
-            bubbleView.imageView.setBackground(action.backgroundDrawable);
+            bubbleView.imageView.setImageDrawable(action.bubble);
             bubbleView.callback = action.callback;
 
             // Calculate and set the locations of the BubbleView

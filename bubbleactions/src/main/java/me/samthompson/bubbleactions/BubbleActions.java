@@ -63,7 +63,7 @@ public class BubbleActions {
     }
 
     /**
-     * Open up BubbleActions on a view, using the specified drawable as the indicator.
+     * Open up BubbleActions on a view.
      *
      * @param view the view that the BubbleActions are contextually connected to. The
      *             view must have a root view.
@@ -125,46 +125,40 @@ public class BubbleActions {
      * circles.
      *
      * @param actionName The label displayed above the bubble action
-     * @param foregroundRes The content of the bubble action
-     * @param backgroundRes The background of the bubble action used to determine shadow
+     * @param drawableRes The content of the bubble action
      * @param callback A callback run on the main thread when the action is selected
      * @return the BubbleActions instance that called this method
      */
-    public BubbleActions addAction(CharSequence actionName, int foregroundRes, int backgroundRes, Callback callback) {
+    public BubbleActions addAction(CharSequence actionName, int drawableRes, Callback callback) {
         Resources resources = root.getResources();
         Resources.Theme theme = root.getContext().getTheme();
-        addAction(actionName, ResourcesCompat.getDrawable(resources, foregroundRes, theme), ResourcesCompat.getDrawable(resources, backgroundRes, theme), callback);
+        addAction(actionName, ResourcesCompat.getDrawable(resources, drawableRes, theme), callback);
         return this;
     }
 
     /**
-     * Add an action using drawables. See the description at {@link #addAction(CharSequence, int, int, BubbleActions.Callback)} for
+     * Add an action using drawables. See the description at {@link #addAction(CharSequence, int, BubbleActions.Callback)} for
      * details.
      *
      * @param actionName The label displayed above the bubble action
-     * @param foreground The content of the bubble action
-     * @param background The background of the bubble action used to determine shadow
+     * @param drawable The content of the bubble action
      * @param callback A callback run on the main thread when the action is selected
      * @return the BubbleActions instance that called this method
      */
-    public BubbleActions addAction(CharSequence actionName, Drawable foreground, Drawable background, Callback callback) {
+    public BubbleActions addAction(CharSequence actionName, Drawable drawable, Callback callback) {
         if (numActions >= actions.length) {
             throw new IllegalStateException(TAG + ": cannot add more than " + BubbleActionOverlay.MAX_ACTIONS + " actions.");
         }
 
-        if (foreground == null) {
-            throw new IllegalArgumentException(TAG + ": the foreground drawable cannot resolve to null.");
-        }
-
-        if (background == null) {
-            throw new IllegalArgumentException(TAG + ": the background drawable cannot resolve to null.");
+        if (drawable == null) {
+            throw new IllegalArgumentException(TAG + ": the drawable cannot resolve to null.");
         }
 
         if (callback == null) {
             throw new IllegalArgumentException(TAG + ": the callback must not be null.");
         }
 
-        actions[numActions] = new Action(actionName, foreground, background, callback);
+        actions[numActions] = new Action(actionName, drawable, callback);
         numActions++;
 
         return this;
@@ -237,19 +231,17 @@ public class BubbleActions {
     };
 
     /**
-     * An abstraction of the bubble action. Each action has a foreground and a background drawable,
+     * An abstraction of the bubble action. Each action has a name, a drawable for the bubble,
      * as well as a callback.
      */
     static class Action {
         CharSequence actionName;
-        Drawable foregroundDrawable;
-        Drawable backgroundDrawable;
+        Drawable bubble;
         Callback callback;
 
-        private Action(CharSequence actionName, Drawable foregroundDrawable, Drawable backgroundDrawable, Callback callback) {
+        private Action(CharSequence actionName, Drawable bubble, Callback callback) {
             this.actionName = actionName;
-            this.foregroundDrawable = foregroundDrawable;
-            this.backgroundDrawable = backgroundDrawable;
+            this.bubble = bubble;
             this.callback = callback;
         }
     }
