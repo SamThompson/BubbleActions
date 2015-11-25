@@ -10,12 +10,12 @@ on ui elements by simply dragging your finger.
 
 
 ##Requirements and dependencies
-`BubbleActions` works with api level 16 and higher. It also is dependent on appcompat-v7.
+`BubbleActions` works with api level 14 and higher. It also is dependent on appcompat-v7.
 
 
 ##Gradle
 ```groovy
-compile 'me.samthompson:bubble-actions:1.0.1'
+compile 'me.samthompson:bubble-actions:1.1.0'
 ```
 
 
@@ -25,29 +25,21 @@ compile 'me.samthompson:bubble-actions:1.0.1'
 `BubbleActions` are built using a [fluent interface](https://en.wikipedia.org/wiki/Fluent_interface) 
 (similar to SnackBar) and supports adding up to 5 actions. You can build `BubbleActions` like this:
 ```java
-BubbleActions.on(myView)                                                                              // Note 1
-        .addAction("Star", R.drawable.ic_star, R.drawable.popup_item, new BubbleAction.Callback() {   // Note 2
+BubbleActions.on(myView)
+        .addAction("Star", R.drawable.bubble_star, new BubbleAction.Callback() {
             @Override
-            public void doAction() {                                                                  // Note 3
+            public void doAction() {
                     Toast.makeText(v.getContext(), "Star pressed!", Toast.LENGTH_SHORT).show();
                 }
             })
         // ... add more actions ...
-        .show();                                                                                      // Note 4
+        .show();
 ```
-1. We start off by declaring that we want `BubbleActions` on `myView`. Behind the scenes, the `BubbleActions` class uses
- reflection to get an instance of `ViewRootImpl` which will be used to detect touch events. If it doesn't find one, 
- it throws an `IllegalStateException`.
-2. We add an action. Each action consists of a label, a foreground drawable/drawable resource id, a background 
-drawable/drawable resource id, and a callback. The foreground drawable is the icon that appears inside the bubble, 
-the background drawable controls the shape of the background and how it reacts to being selected, and the label
-determines what text is displayed above the bubble.
-3. When the user lifts their finger while over a bubble, the cooresponding callback is fired. 
-This always happens on the main thread.
-4. Show the `BubbleActions` by calling the `show()` method. Unlike SnackBar or AlertDialog, this method is not thread safe, so attempting
-to show `BubbleActions` from a separate thread may lead to unexpected results. You do not necessarily have to show the 
-`BubbleActions` immediately; the `BubbleActions` object can be stored for later use. The actions will remain visible as 
-long as the user's finger is pressed to the screen.
+Every action in BubbleActions has 3 parts:
+
+1. an action name that will be displayed above the bubble,
+2. a drawable for the bubble itself, and
+3. a callback that will be executed on the main thread when the user lifts their finger over that action.
 
 ####Basic example
 In the activity we set a long click listener to show the `BubbleActions`:
@@ -56,19 +48,19 @@ findViewById(R.id.my_view).setOnLongClickListener(new View.OnLongClickListener()
         @Override
         public boolean onLongClick(final View v) {
             BubbleActions.on(v)
-                    .addAction("Star", R.drawable.ic_star, R.drawable.popup_item, new BubbleActions.Callback() {
+                    .addAction("Star", R.drawable.bubble_star, new BubbleActions.Callback() {
                         @Override
                         public void doAction() {
                             Toast.makeText(v.getContext(), "Star pressed!", Toast.LENGTH_SHORT).show();
                         }
                     })
-                    .addAction("Share", R.drawable.ic_share, R.drawable.popup_item, new BubbleActions.Callback() {
+                    .addAction("Share", R.drawable.bubble_share, new BubbleActions.Callback() {
                         @Override
                         public void doAction() {
                             Toast.makeText(v.getContext(), "Share pressed!", Toast.LENGTH_SHORT).show();
                         }
                     })
-                    .addAction("Hide", R.drawable.ic_hide, R.drawable.popup_item, new BubbleActions.Callback() {
+                    .addAction("Hide", R.drawable.bubble_hide, new BubbleActions.Callback() {
                         @Override
                         public void doAction() {
                             Toast.makeText(v.getContext(), "Hide pressed!", Toast.LENGTH_SHORT).show();
