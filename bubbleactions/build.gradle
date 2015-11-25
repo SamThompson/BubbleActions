@@ -7,7 +7,7 @@ android {
     resourcePrefix "bubble_actions_"
 
     defaultConfig {
-        minSdkVersion 16
+        minSdkVersion 14
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
@@ -32,7 +32,7 @@ publish {
     groupId = GROUP_NAME
     artifactId = 'bubble-actions'
     version = VERSION_NAME
-    description = 'An open source implementation of the long press actions as seen in the Pinterest app.'
+    description = 'An open source implementation of the long press actions in the Pinterest app.'
     website = SITE_URL
     bintrayUser = BINTRAY_USER
     bintrayKey = BINTRAY_KEY
