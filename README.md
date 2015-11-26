@@ -1,4 +1,4 @@
-#BubbleActions [![Build Status](https://travis-ci.org/SamThompson/BubbleActions.svg)](https://travis-ci.org/SamThompson/BubbleActions)  [![Download](https://api.bintray.com/packages/st028/maven/bubble-actions/images/download.svg) ](https://bintray.com/st028/maven/bubble-actions/_latestVersion)
+#BubbleActions [![Build Status](https://travis-ci.org/SamThompson/BubbleActions.svg)](https://travis-ci.org/SamThompson/BubbleActions) [ ![Download](https://api.bintray.com/packages/samthompson/maven/bubble-actions/images/download.svg) ](https://bintray.com/samthompson/maven/bubble-actions/_latestVersion) 
 
 Inspired by the Pinterest Android app, `BubbleActions` make it easy to perform actions 
 on ui elements by simply dragging your finger.

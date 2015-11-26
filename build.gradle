@@ -16,7 +16,7 @@ ext {
     VERSION_CODE = versionCode().toInteger()
     SITE_URL = 'https://github.com/SamThompson/BubbleActions'
     GIT_URL = 'https://github.com/SamThompson/BubbleActions.git'
-    BINTRAY_USER = 'st028'
+    BINTRAY_USER = 'samthompson'
     GROUP_NAME = 'me.samthompson'
     COMPILE_SDK = 23
     BUILD_TOOLS = '23.0.2'
