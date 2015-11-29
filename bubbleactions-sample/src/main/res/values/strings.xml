@@ -3,4 +3,6 @@
     <string name="long_press_me">Long press me!</string>
     <string name="orientation_example">Bubble action orientation</string>
     <string name="recyclerview_example">Bubble actions in a RecyclerView</string>
+    <string name="kotlin_example">Bubble Actions in Kotlin</string>
+    <string name="this_is_kotlin">This ui doesn\'t look very interesting, but it\'s actually Kotlin behind the scenes!</string>
 </resources>

@@ -71,6 +71,26 @@ findViewById(R.id.my_view).setOnLongClickListener(new View.OnLongClickListener()
     });
 ```
 
+####Kotlin example
+Here's the same example as above, translated to Kotlin:
+```kotlin
+val textView = findViewById(R.id.text_view);
+textView.setOnLongClickListener {
+    BubbleActions.on(textView)
+            .addAction("Star", R.drawable.bubble_star, {
+                Toast.makeText(textView.context, "Star pressed!", Toast.LENGTH_SHORT).show()
+            })
+            .addAction("Share", R.drawable.bubble_share, {
+                Toast.makeText(textView.context, "Share pressed!", Toast.LENGTH_SHORT).show()
+            })
+            .addAction("Hide", R.drawable.bubble_hide, {
+                Toast.makeText(textView.context, "Hide pressed!", Toast.LENGTH_SHORT).show()
+            })
+            .show()
+    true
+}
+```
+
 ####Changing the font
 Use a custom font? Have no fear! You can configure the typeface of the bubble actions by using `withTypeface` when
 you build your `BubbleActions`:

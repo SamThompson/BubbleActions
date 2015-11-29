@@ -17,6 +17,8 @@
         </activity>
         <activity android:name="me.samthompson.bubbleactions_sample.RecyclerViewActivity" >
         </activity>
+        <activity android:name="me.samthompson.bubbleactions_sample.KotlinActivity" >
+        </activity>
     </application>
 
 </manifest>
