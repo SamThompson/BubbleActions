@@ -53,11 +53,7 @@ public class BubbleActions {
             Method method = root.getClass().getMethod("getViewRootImpl");
             viewRootImpl = method.invoke(root);
             getLastTouchPoint = viewRootImpl.getClass().getMethod("getLastTouchPoint", Point.class);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
+        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             e.printStackTrace();
         }
     }
@@ -197,10 +193,7 @@ public class BubbleActions {
         try {
             getLastTouchPoint.invoke(viewRootImpl, touchPoint);
             overlay.setupOverlay(touchPoint.x, touchPoint.y, this);
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-            return;
-        } catch (IllegalAccessException e) {
+        } catch (InvocationTargetException | IllegalAccessException e) {
             e.printStackTrace();
             return;
         }
