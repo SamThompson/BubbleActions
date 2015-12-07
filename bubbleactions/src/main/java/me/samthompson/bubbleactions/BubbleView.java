@@ -61,7 +61,7 @@ class BubbleView extends LinearLayout {
             // Gotcha: you need to return true for drag end and start
             switch (action) {
                 case DragEvent.ACTION_DRAG_STARTED:
-                    return true;
+                    return DragUtils.isDragForMe(event.getClipDescription().getLabel());
                 case DragEvent.ACTION_DRAG_ENDED:
                     return true;
                 case DragEvent.ACTION_DRAG_ENTERED:
