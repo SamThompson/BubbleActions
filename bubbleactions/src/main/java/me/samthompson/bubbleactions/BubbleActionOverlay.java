@@ -10,6 +10,7 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPropertyAnimatorListenerAdapter;
+import android.support.v7.view.ViewPropertyAnimatorCompatSet;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -192,6 +193,55 @@ class BubbleActionOverlay extends FrameLayout {
 
     void showOverlay() {
         startDrag(dragData, dragShadowBuilder, null, 0);
+    }
+
+    ViewPropertyAnimatorCompatSet getAnimateSetShow() {
+        ViewPropertyAnimatorCompatSet resultSet = new ViewPropertyAnimatorCompatSet();
+        resultSet.play(ViewCompat.animate(bubbleActionIndicator)
+                .alpha(1f)
+                .setDuration(ANIMATION_DURATION));
+
+        for (int i = 0; i < numActions; i++) {
+            final BubbleView child = (BubbleView) getChildAt(i + 1);
+            child.setVisibility(VISIBLE);
+            resultSet.play(ViewCompat.animate(child)
+                    .translationX(actionEndX[i])
+                    .translationY(actionEndY[i])
+                    .alpha(1f)
+                    .setInterpolator(overshootInterpolator)
+                    .setDuration(ANIMATION_DURATION)
+                    .setListener(null));
+        }
+
+        return resultSet;
+    }
+
+    ViewPropertyAnimatorCompatSet getAnimateSetHide() {
+        ViewPropertyAnimatorCompatSet resultSet = new ViewPropertyAnimatorCompatSet();
+        resultSet.play(ViewCompat.animate(bubbleActionIndicator)
+                .alpha(0f)
+                .setDuration(ANIMATION_DURATION));
+
+        for (int i = 0; i < numActions; i++) {
+            final BubbleView child = (BubbleView) getChildAt(i + 1);
+            resultSet.play(ViewCompat.animate(child)
+                    .translationX(actionStartX[i])
+                    .translationY(actionStartY[i])
+                    .alpha(0f)
+                    .setInterpolator(null)
+                    .setListener(new ViewPropertyAnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(View view) {
+                            super.onAnimationEnd(view);
+                            child.setVisibility(INVISIBLE);
+                            child.resetChildren();
+                            child.animatedIn = false;
+                        }
+                    })
+                    .setDuration(ANIMATION_DURATION));
+        }
+
+        return resultSet;
     }
 
     boolean dragStarted(DragEvent event) {
