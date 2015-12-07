@@ -191,7 +191,7 @@ class BubbleActionOverlay extends FrameLayout {
 
     }
 
-    void showOverlay() {
+    void startDrag() {
         startDrag(dragData, dragShadowBuilder, null, 0);
     }
 

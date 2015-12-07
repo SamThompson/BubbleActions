@@ -198,7 +198,7 @@ public class BubbleActions {
         }
 
         showing = true;
-        overlay.showOverlay();
+        overlay.startDrag();
     }
 
     void hideOverlay() {
