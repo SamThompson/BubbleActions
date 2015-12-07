@@ -6,6 +6,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.ViewCompat;
+import android.support.v4.view.ViewPropertyAnimatorListenerAdapter;
 import android.view.DragEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -197,8 +198,16 @@ public class BubbleActions {
             return;
         }
 
-        showing = true;
-        overlay.startDrag();
+        overlay.getAnimateSetShow()
+                .setListener(new ViewPropertyAnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(View view) {
+                        super.onAnimationEnd(view);
+                        showing = true;
+                        overlay.startDrag();
+                    }
+                })
+                .start();
     }
 
     void hideOverlay() {
@@ -213,9 +222,17 @@ public class BubbleActions {
 
             switch (action) {
                 case DragEvent.ACTION_DRAG_STARTED:
-                    return overlay.dragStarted(event);
+                    return DragUtils.isDragForMe(event.getClipDescription().getLabel());
                 case DragEvent.ACTION_DRAG_ENDED:
-                    return overlay.dragEnded(BubbleActions.this);
+                    overlay.getAnimateSetHide()
+                            .setListener(new ViewPropertyAnimatorListenerAdapter() {
+                                @Override
+                                public void onAnimationEnd(View view) {
+                                    super.onAnimationEnd(view);
+                                    hideOverlay();
+                                }
+                            });
+                    return true;
             }
 
             return false;
