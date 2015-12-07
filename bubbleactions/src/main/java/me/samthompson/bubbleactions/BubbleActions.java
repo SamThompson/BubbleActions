@@ -24,14 +24,6 @@ public class BubbleActions {
 
     private static final String TAG = BubbleActions.class.getSimpleName();
 
-    /**
-     * A {@link Callback#doAction()} call cooresponding to a particular action is invoked on the
-     * main thread when the user lifts their finger from the screen while on top of the action.
-     */
-    public interface Callback {
-        void doAction();
-    }
-
     private ViewGroup root;
     private BubbleActionOverlay overlay;
     private Method getLastTouchPoint;
@@ -137,7 +129,7 @@ public class BubbleActions {
     }
 
     /**
-     * Add an action using drawables. See the description at {@link #addAction(CharSequence, int, BubbleActions.Callback)} for
+     * Add an action using drawables. See the description at {@link #addAction(CharSequence, int, Callback)} for
      * details.
      *
      * @param actionName The label displayed above the bubble action
@@ -229,21 +221,5 @@ public class BubbleActions {
             return false;
         }
     };
-
-    /**
-     * An abstraction of the bubble action. Each action has a name, a drawable for the bubble,
-     * as well as a callback.
-     */
-    static class Action {
-        CharSequence actionName;
-        Drawable bubble;
-        Callback callback;
-
-        private Action(CharSequence actionName, Drawable bubble, Callback callback) {
-            this.actionName = actionName;
-            this.bubble = bubble;
-            this.callback = callback;
-        }
-    }
 
 }

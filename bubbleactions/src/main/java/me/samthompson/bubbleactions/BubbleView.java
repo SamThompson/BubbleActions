@@ -25,7 +25,7 @@ class BubbleView extends LinearLayout {
     private static final int ANIMATION_DURATION = 150;
 
     boolean animatedIn = false;
-    BubbleActions.Callback callback;
+    Callback callback;
     TextView textView;
     ImageView imageView;
 

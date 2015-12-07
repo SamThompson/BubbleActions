@@ -167,7 +167,7 @@ class BubbleActionOverlay extends FrameLayout {
             BubbleView bubbleView = (BubbleView) getChildAt(i + 1);
 
             // Bind action specifics to BubbleView
-            BubbleActions.Action action = bubbleActions.actions[actionIndex];
+            Action action = bubbleActions.actions[actionIndex];
             bubbleView.textView.setText(action.actionName);
             bubbleView.imageView.setImageDrawable(action.bubble);
             bubbleView.callback = action.callback;
