@@ -173,19 +173,23 @@ public class BubbleActions {
         }
 
         if (ViewCompat.isLaidOut(overlay)) {
-            setupAndShow();
+            showOverlay();
         } else {
             overlay.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
                 @Override
                 public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-                    setupAndShow();
                     overlay.removeOnLayoutChangeListener(this);
+                    showOverlay();
                 }
             });
         }
     }
 
-    private void setupAndShow() {
+    public boolean isShowing() {
+        return showing;
+    }
+
+    private void showOverlay() {
         // use reflection to get the last touched xy location
         try {
             getLastTouchPoint.invoke(viewRootImpl, touchPoint);
