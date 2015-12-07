@@ -24,7 +24,6 @@ class BubbleView extends LinearLayout {
 
     private static final int ANIMATION_DURATION = 150;
 
-    boolean animatedIn = false;
     Callback callback;
     TextView textView;
     ImageView imageView;
@@ -41,7 +40,8 @@ class BubbleView extends LinearLayout {
         imageView.setScaleY(DESELECTED_SCALE);
     }
 
-    void resetChildren() {
+    void resetAppearance() {
+        setVisibility(INVISIBLE);
         imageView.setScaleX(DESELECTED_SCALE);
         imageView.setScaleY(DESELECTED_SCALE);
         imageView.setSelected(false);
@@ -65,52 +65,48 @@ class BubbleView extends LinearLayout {
                 case DragEvent.ACTION_DRAG_ENDED:
                     return true;
                 case DragEvent.ACTION_DRAG_ENTERED:
-                    if (animatedIn) {
-                        imageView.setSelected(true);
-                        ViewCompat.animate(imageView)
-                                .scaleX(SELECTED_SCALE)
-                                .scaleY(SELECTED_SCALE)
-                                .setListener(new ViewPropertyAnimatorListenerAdapter() {
-                                    @Override
-                                    public void onAnimationStart(View view) {
-                                        super.onAnimationStart(view);
-                                        textView.setVisibility(VISIBLE);
-                                        ViewCompat.animate(textView)
-                                                .alpha(1f)
-                                                .setListener(null)
-                                                .setDuration(ANIMATION_DURATION);
-                                    }
-                                })
-                                .setDuration(ANIMATION_DURATION);
-                    }
+                    imageView.setSelected(true);
+                    ViewCompat.animate(imageView)
+                            .scaleX(SELECTED_SCALE)
+                            .scaleY(SELECTED_SCALE)
+                            .setListener(new ViewPropertyAnimatorListenerAdapter() {
+                                @Override
+                                public void onAnimationStart(View view) {
+                                    super.onAnimationStart(view);
+                                    textView.setVisibility(VISIBLE);
+                                    ViewCompat.animate(textView)
+                                            .alpha(1f)
+                                            .setListener(null)
+                                            .setDuration(ANIMATION_DURATION);
+                                }
+                            })
+                            .setDuration(ANIMATION_DURATION);
 
-                    return animatedIn;
+                    return true;
                 case DragEvent.ACTION_DRAG_EXITED:
-                    if (animatedIn) {
-                        imageView.setSelected(false);
-                        ViewCompat.animate(imageView)
-                                .scaleX(DESELECTED_SCALE)
-                                .scaleY(DESELECTED_SCALE)
-                                .setDuration(ANIMATION_DURATION)
-                                .setListener(new ViewPropertyAnimatorListenerAdapter() {
-                                    @Override
-                                    public void onAnimationStart(View view) {
-                                        super.onAnimationStart(view);
-                                        ViewCompat.animate(textView)
-                                                .alpha(0f)
-                                                .setListener(new ViewPropertyAnimatorListenerAdapter() {
-                                                    @Override
-                                                    public void onAnimationEnd(View view) {
-                                                        super.onAnimationEnd(view);
-                                                        textView.setVisibility(INVISIBLE);
-                                                    }
-                                                })
-                                                .setDuration(ANIMATION_DURATION);
-                                    }
-                                });
-                    }
+                    imageView.setSelected(false);
+                    ViewCompat.animate(imageView)
+                            .scaleX(DESELECTED_SCALE)
+                            .scaleY(DESELECTED_SCALE)
+                            .setDuration(ANIMATION_DURATION)
+                            .setListener(new ViewPropertyAnimatorListenerAdapter() {
+                                @Override
+                                public void onAnimationStart(View view) {
+                                    super.onAnimationStart(view);
+                                    ViewCompat.animate(textView)
+                                            .alpha(0f)
+                                            .setListener(new ViewPropertyAnimatorListenerAdapter() {
+                                                @Override
+                                                public void onAnimationEnd(View view) {
+                                                    super.onAnimationEnd(view);
+                                                    textView.setVisibility(INVISIBLE);
+                                                }
+                                            })
+                                            .setDuration(ANIMATION_DURATION);
+                                }
+                            });
 
-                    return animatedIn;
+                    return true;
                 case DragEvent.ACTION_DROP:
                     callback.doAction();
                     return true;

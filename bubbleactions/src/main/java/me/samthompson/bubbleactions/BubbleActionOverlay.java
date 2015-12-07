@@ -11,7 +11,6 @@ import android.os.Build;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPropertyAnimatorListenerAdapter;
 import android.support.v7.view.ViewPropertyAnimatorCompatSet;
-import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -232,9 +231,7 @@ class BubbleActionOverlay extends FrameLayout {
                         @Override
                         public void onAnimationEnd(View view) {
                             super.onAnimationEnd(view);
-                            child.setVisibility(INVISIBLE);
-                            child.resetChildren();
-                            child.animatedIn = false;
+                            child.resetAppearance();
                         }
                     })
                     .setDuration(ANIMATION_DURATION));
