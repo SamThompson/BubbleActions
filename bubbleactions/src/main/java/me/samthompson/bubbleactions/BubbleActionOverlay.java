@@ -79,7 +79,7 @@ class BubbleActionOverlay extends FrameLayout {
         super(context);
         contentClipRect = new RectF();
         dragShadowBuilder = new DragShadowBuilder();
-        dragData = new ClipData(TAG, new String[] {TAG}, new ClipData.Item(TAG));
+        dragData = DragUtils.getClipData();
 
         LayoutInflater inflater = LayoutInflater.from(context);
         bubbleActionIndicator = (ImageView) inflater.inflate(R.layout.bubble_actions_indicator, this, false);
