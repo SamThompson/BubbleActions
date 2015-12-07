@@ -210,7 +210,7 @@ public class BubbleActions {
                 .start();
     }
 
-    void hideOverlay() {
+    void removeOverlay() {
         showing = false;
         root.removeView(overlay);
     }
@@ -229,7 +229,7 @@ public class BubbleActions {
                                 @Override
                                 public void onAnimationEnd(View view) {
                                     super.onAnimationEnd(view);
-                                    hideOverlay();
+                                    removeOverlay();
                                 }
                             });
                     return true;
