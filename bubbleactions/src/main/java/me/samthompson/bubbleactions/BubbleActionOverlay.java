@@ -72,7 +72,6 @@ class BubbleActionOverlay extends FrameLayout {
     private RectF contentClipRect;
     private ImageView bubbleActionIndicator;
     private int numActions = 0;
-    private boolean overlayActive = false;
     private ObjectAnimator backgroundAnimator;
 
     BubbleActionOverlay(Context context) {
