@@ -10,10 +10,18 @@ on ui elements by simply dragging your finger.
 
 
 ##Requirements and dependencies
-`BubbleActions` works with api level 14 and higher. It also is dependent on appcompat-v7.
+`BubbleActions` works with api level 11 and higher. It also is dependent on appcompat-v7.
 
 
 ##Gradle
+In your top-level `build.gradle`:
+```groovy
+repositories {
+        jcenter()
+}
+```
+
+In your project-level `build.gradle`:
 ```groovy
 compile 'me.samthompson:bubble-actions:1.2.0'
 ```

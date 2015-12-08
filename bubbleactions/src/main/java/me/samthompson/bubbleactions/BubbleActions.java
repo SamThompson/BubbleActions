@@ -200,7 +200,7 @@ public final class BubbleActions {
             return;
         }
 
-        overlay.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+        overlay.setOnAttachStateChangeListener(new BubbleActionOverlay.OnAttachStateChangeListener() {
             @Override
             public void onViewAttachedToWindow(View v) {
             }
@@ -210,7 +210,7 @@ public final class BubbleActions {
                 // As identified in SnackBar, if we receive this event, the user did not
                 // initiate it, so hide the overlay and remove it from its parent so the state is
                 // kept in sync
-                overlay.removeOnAttachStateChangeListener(this);
+                overlay.setOnAttachStateChangeListener(null);
                 if (isShowing()) {
                     removeOverlay();
                 }

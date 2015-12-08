@@ -11,6 +11,7 @@ import android.os.Build;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.view.ViewPropertyAnimatorCompatSet;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
 import android.widget.FrameLayout;
@@ -20,6 +21,14 @@ import android.widget.ImageView;
  *
  */
 class BubbleActionOverlay extends FrameLayout {
+
+    /**
+     * For back-porting OnAttachStateChangeListener back to api 11
+     */
+    interface OnAttachStateChangeListener {
+        void onViewAttachedToWindow(View view);
+        void onViewDetachedFromWindow(View view);
+    }
 
     /**
      * Ripped straight from v21 AOSP. No idea why this is v21+
@@ -68,6 +77,7 @@ class BubbleActionOverlay extends FrameLayout {
     private ImageView bubbleActionIndicator;
     private int numActions = 0;
     private ObjectAnimator backgroundAnimator;
+    private OnAttachStateChangeListener onAttachStateChangeListener;
 
     BubbleActionOverlay(Context context) {
         super(context);
@@ -105,6 +115,26 @@ class BubbleActionOverlay extends FrameLayout {
             itemView.setAlpha(0f);
             addView(itemView, -1, new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         }
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        if (onAttachStateChangeListener != null) {
+            onAttachStateChangeListener.onViewAttachedToWindow(this);
+        }
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        if (onAttachStateChangeListener != null) {
+            onAttachStateChangeListener.onViewDetachedFromWindow(this);
+        }
+    }
+
+    public void setOnAttachStateChangeListener(OnAttachStateChangeListener onAttachStateChangeListener) {
+        this.onAttachStateChangeListener = onAttachStateChangeListener;
     }
 
     void setLabelTypeface(Typeface typeface) {
