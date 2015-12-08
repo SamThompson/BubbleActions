@@ -21,9 +21,6 @@ android {
 }
 
 dependencies {
-    // at some point write some tests
-    testCompile 'junit:junit:4.12'
-
     compile 'com.android.support:appcompat-v7:23.1.1'
 }
 
