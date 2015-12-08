@@ -10,8 +10,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import me.samthompson.bubbleactions_sample.R;
-
 import me.samthompson.bubbleactions.BubbleActions;
 import me.samthompson.bubbleactions.Callback;
 
