@@ -19,7 +19,7 @@ import java.lang.reflect.Method;
  * elements by simply dragging your finger. BubbleActions uses a fluent interface to build and show
  * actions similar to SnackBar or AlertDialog.
  */
-public class BubbleActions {
+public final class BubbleActions {
 
     private static final String TAG = BubbleActions.class.getSimpleName();
 
