@@ -238,6 +238,7 @@ public final class BubbleActions {
     void removeOverlay() {
         showing = false;
         root.removeView(overlay);
+        overlay.resetBubbleViews();
     }
 
     private View.OnDragListener overlayDragListener = new View.OnDragListener() {

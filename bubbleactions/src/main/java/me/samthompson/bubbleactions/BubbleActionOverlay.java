@@ -203,6 +203,12 @@ class BubbleActionOverlay extends FrameLayout {
         backgroundAnimator.reverse();
     }
 
+    void resetBubbleViews() {
+        for (int i = 0; i < numActions; i++) {
+            ((BubbleView) getChildAt(i + 1)).resetAppearance();
+        }
+    }
+
     ViewPropertyAnimatorCompatSet getAnimateSetShow() {
         ViewPropertyAnimatorCompatSet resultSet = new ViewPropertyAnimatorCompatSet();
         resultSet.play(ViewCompat.animate(bubbleActionIndicator)
