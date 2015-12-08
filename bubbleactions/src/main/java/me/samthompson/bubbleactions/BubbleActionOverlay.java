@@ -9,16 +9,12 @@ import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.support.v4.view.ViewCompat;
-import android.support.v4.view.ViewPropertyAnimatorListenerAdapter;
-import android.view.DragEvent;
+import android.support.v7.view.ViewPropertyAnimatorCompatSet;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-
-import com.sam.bubbleactions.R;
 
 /**
  *
@@ -44,10 +40,10 @@ class BubbleActionOverlay extends FrameLayout {
             int endG = (endInt >> 8) & 0xff;
             int endB = endInt & 0xff;
 
-            return ((startA + (int)(fraction * (endA - startA))) << 24) |
-                    ((startR + (int)(fraction * (endR - startR))) << 16) |
-                    ((startG + (int)(fraction * (endG - startG))) << 8) |
-                    ((startB + (int)(fraction * (endB - startB))));
+            return ((startA + (int) (fraction * (endA - startA))) << 24) |
+                    ((startR + (int) (fraction * (endR - startR))) << 16) |
+                    ((startG + (int) (fraction * (endG - startG))) << 8) |
+                    ((startB + (int) (fraction * (endB - startB))));
         }
     }
 
@@ -71,14 +67,13 @@ class BubbleActionOverlay extends FrameLayout {
     private RectF contentClipRect;
     private ImageView bubbleActionIndicator;
     private int numActions = 0;
-    private boolean overlayActive = false;
     private ObjectAnimator backgroundAnimator;
 
     BubbleActionOverlay(Context context) {
         super(context);
         contentClipRect = new RectF();
         dragShadowBuilder = new DragShadowBuilder();
-        dragData = new ClipData(TAG, new String[] {TAG}, new ClipData.Item(TAG));
+        dragData = DragUtils.getClipData();
 
         LayoutInflater inflater = LayoutInflater.from(context);
         bubbleActionIndicator = (ImageView) inflater.inflate(R.layout.bubble_actions_indicator, this, false);
@@ -167,7 +162,7 @@ class BubbleActionOverlay extends FrameLayout {
             BubbleView bubbleView = (BubbleView) getChildAt(i + 1);
 
             // Bind action specifics to BubbleView
-            BubbleActions.Action action = bubbleActions.actions[actionIndex];
+            Action action = bubbleActions.actions[actionIndex];
             bubbleView.textView.setText(action.actionName);
             bubbleView.imageView.setImageDrawable(action.bubble);
             bubbleView.callback = action.callback;
@@ -190,90 +185,61 @@ class BubbleActionOverlay extends FrameLayout {
 
     }
 
-    void showOverlay() {
-        startDrag(dragData, dragShadowBuilder, null, 0);
-    }
-
-    boolean dragStarted(DragEvent event) {
+    void startDrag() {
         // There is a bug in v17 and below where the text won't appear because it hasn't
         // been measured properly
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             requestLayout();
         }
 
-        if (event.getClipDescription().getLabel().equals(TAG)) {
-            if (!overlayActive) {
-                overlayActive = true;
-                backgroundAnimator.start();
-                ViewCompat.animate(bubbleActionIndicator)
-                        .alpha(1f)
-                        .setDuration(ANIMATION_DURATION)
-                        .setListener(null);
-
-                for (int i = 0; i < numActions; i++) {
-                    final BubbleView child = (BubbleView) getChildAt(i + 1);
-                    child.setVisibility(VISIBLE);
-                    ViewCompat.animate(child)
-                            .translationX(actionEndX[i])
-                            .translationY(actionEndY[i])
-                            .alpha(1f)
-                            .setInterpolator(overshootInterpolator)
-                            .setListener(new ViewPropertyAnimatorListenerAdapter() {
-                                @Override
-                                public void onAnimationEnd(View view) {
-                                    super.onAnimationEnd(view);
-                                    child.animatedIn = true;
-                                }
-                            })
-                            .setDuration(ANIMATION_DURATION);
-                }
-            }
-            return true;
-        }
-
-        return false;
+        startDrag(dragData, dragShadowBuilder, null, 0);
     }
 
-    boolean dragEnded(final BubbleActions bubbleActions) {
-        if (overlayActive) {
-            overlayActive = false;
-            ViewCompat.animate(bubbleActionIndicator)
-                    .alpha(0f)
-                    .setDuration(ANIMATION_DURATION)
-                    .setListener(new ViewPropertyAnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationStart(View view) {
-                            super.onAnimationStart(view);
-                        }
+    void animateDimBackground() {
+        backgroundAnimator.start();
+    }
 
-                        @Override
-                        public void onAnimationEnd(View view) {
-                            super.onAnimationEnd(view);
-                            bubbleActions.hideOverlay();
-                        }
-                    });
+    void animateUndimBackground() {
+        backgroundAnimator.reverse();
+    }
 
-            for (int i = 0; i < numActions; i++) {
-                final BubbleView child = (BubbleView) getChildAt(i + 1);
-                ViewCompat.animate(child)
-                        .translationX(actionStartX[i])
-                        .translationY(actionStartY[i])
-                        .alpha(0f)
-                        .setInterpolator(null)
-                        .setListener(new ViewPropertyAnimatorListenerAdapter() {
-                            @Override
-                            public void onAnimationEnd(View view) {
-                                super.onAnimationEnd(view);
-                                child.setVisibility(INVISIBLE);
-                                child.resetChildren();
-                                child.animatedIn = false;
-                            }
-                        })
-                        .setDuration(ANIMATION_DURATION);
-            }
-            backgroundAnimator.reverse();
+    ViewPropertyAnimatorCompatSet getAnimateSetShow() {
+        ViewPropertyAnimatorCompatSet resultSet = new ViewPropertyAnimatorCompatSet();
+        resultSet.play(ViewCompat.animate(bubbleActionIndicator)
+                .alpha(1f)
+                .setDuration(ANIMATION_DURATION));
+
+        for (int i = 0; i < numActions; i++) {
+            final BubbleView child = (BubbleView) getChildAt(i + 1);
+            child.setVisibility(VISIBLE);
+            resultSet.play(ViewCompat.animate(child)
+                    .translationX(actionEndX[i])
+                    .translationY(actionEndY[i])
+                    .alpha(1f)
+                    .setInterpolator(overshootInterpolator)
+                    .setDuration(ANIMATION_DURATION));
         }
-        return true;
+
+        return resultSet;
+    }
+
+    ViewPropertyAnimatorCompatSet getAnimateSetHide() {
+        ViewPropertyAnimatorCompatSet resultSet = new ViewPropertyAnimatorCompatSet();
+        resultSet.play(ViewCompat.animate(bubbleActionIndicator)
+                .alpha(0f)
+                .setDuration(ANIMATION_DURATION));
+
+        for (int i = 0; i < numActions; i++) {
+            final BubbleView child = (BubbleView) getChildAt(i + 1);
+            resultSet.play(ViewCompat.animate(child)
+                    .translationX(actionStartX[i])
+                    .translationY(actionStartY[i])
+                    .alpha(0f)
+                    .setInterpolator(null)
+                    .setDuration(ANIMATION_DURATION));
+        }
+
+        return resultSet;
     }
 
 }

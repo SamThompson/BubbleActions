@@ -26,7 +26,7 @@ compile 'me.samthompson:bubble-actions:1.1.0'
 (similar to SnackBar) and supports adding up to 5 actions. You can build `BubbleActions` like this:
 ```java
 BubbleActions.on(myView)
-        .addAction("Star", R.drawable.bubble_star, new BubbleAction.Callback() {
+        .addAction("Star", R.drawable.bubble_star, new Callback() {
             @Override
             public void doAction() {
                     Toast.makeText(v.getContext(), "Star pressed!", Toast.LENGTH_SHORT).show();
@@ -48,19 +48,19 @@ findViewById(R.id.my_view).setOnLongClickListener(new View.OnLongClickListener()
         @Override
         public boolean onLongClick(final View v) {
             BubbleActions.on(v)
-                    .addAction("Star", R.drawable.bubble_star, new BubbleActions.Callback() {
+                    .addAction("Star", R.drawable.bubble_star, new Callback() {
                         @Override
                         public void doAction() {
                             Toast.makeText(v.getContext(), "Star pressed!", Toast.LENGTH_SHORT).show();
                         }
                     })
-                    .addAction("Share", R.drawable.bubble_share, new BubbleActions.Callback() {
+                    .addAction("Share", R.drawable.bubble_share, new Callback() {
                         @Override
                         public void doAction() {
                             Toast.makeText(v.getContext(), "Share pressed!", Toast.LENGTH_SHORT).show();
                         }
                     })
-                    .addAction("Hide", R.drawable.bubble_hide, new BubbleActions.Callback() {
+                    .addAction("Hide", R.drawable.bubble_hide, new Callback() {
                         @Override
                         public void doAction() {
                             Toast.makeText(v.getContext(), "Hide pressed!", Toast.LENGTH_SHORT).show();

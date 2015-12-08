@@ -10,15 +10,16 @@ import android.support.v4.content.res.ResourcesCompat;
  */
 public class BubbleUtil {
 
-    private BubbleUtil() {}
+    private BubbleUtil() {
+    }
 
     /**
      * Create a drawable to be used as for a bubble. This is not necessarily the best way to create
      * drawables for your bubbles, and you should probably use a layer-list or combine the icon and
      * background in your favorite image editing program.
      *
-     * @param context used to load the resource
-     * @param iconRes resource id of the icon drawable
+     * @param context       used to load the resource
+     * @param iconRes       resource id of the icon drawable
      * @param backgroundRes resource id for the background drawable
      * @return a drawable where the icon appears over the background
      */
@@ -32,7 +33,7 @@ public class BubbleUtil {
      * drawables for your bubbles, and you should probably use a layer-list or combine the icon and
      * background in your favorite image editing program.
      *
-     * @param icon drawable for the icon
+     * @param icon       drawable for the icon
      * @param background drawable for the background
      * @return a drawable where the icon appears over the background
      */

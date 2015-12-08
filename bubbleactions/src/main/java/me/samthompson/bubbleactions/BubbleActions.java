@@ -6,11 +6,10 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.ViewCompat;
+import android.support.v4.view.ViewPropertyAnimatorListenerAdapter;
 import android.view.DragEvent;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.sam.bubbleactions.R;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -20,17 +19,9 @@ import java.lang.reflect.Method;
  * elements by simply dragging your finger. BubbleActions uses a fluent interface to build and show
  * actions similar to SnackBar or AlertDialog.
  */
-public class BubbleActions {
+public final class BubbleActions {
 
     private static final String TAG = BubbleActions.class.getSimpleName();
-
-    /**
-     * A {@link Callback#doAction()} call cooresponding to a particular action is invoked on the
-     * main thread when the user lifts their finger from the screen while on top of the action.
-     */
-    public interface Callback {
-        void doAction();
-    }
 
     private ViewGroup root;
     private BubbleActionOverlay overlay;
@@ -124,9 +115,9 @@ public class BubbleActions {
      * feedback. Check out the sample app for an example of this. Actions are not limited to
      * circles.
      *
-     * @param actionName The label displayed above the bubble action
+     * @param actionName  The label displayed above the bubble action
      * @param drawableRes The content of the bubble action
-     * @param callback A callback run on the main thread when the action is selected
+     * @param callback    A callback run on the main thread when the action is selected
      * @return the BubbleActions instance that called this method
      */
     public BubbleActions addAction(CharSequence actionName, int drawableRes, Callback callback) {
@@ -137,12 +128,12 @@ public class BubbleActions {
     }
 
     /**
-     * Add an action using drawables. See the description at {@link #addAction(CharSequence, int, BubbleActions.Callback)} for
+     * Add an action using drawables. See the description at {@link #addAction(CharSequence, int, Callback)} for
      * details.
      *
      * @param actionName The label displayed above the bubble action
-     * @param drawable The content of the bubble action
-     * @param callback A callback run on the main thread when the action is selected
+     * @param drawable   The content of the bubble action
+     * @param callback   A callback run on the main thread when the action is selected
      * @return the BubbleActions instance that called this method
      */
     public BubbleActions addAction(CharSequence actionName, Drawable drawable, Callback callback) {
@@ -166,9 +157,9 @@ public class BubbleActions {
 
     /**
      * Show the bubble actions. Internally this will do 3 things:
-     *      1. Add the overlay to the root view
-     *      2. Use reflection to get the last touched xy location
-     *      3. Animate the overlay in
+     * 1. Add the overlay to the root view
+     * 2. Use reflection to get the last touched xy location
+     * 3. Animate the overlay in
      */
     public void show() {
         if (showing) {
@@ -180,19 +171,23 @@ public class BubbleActions {
         }
 
         if (ViewCompat.isLaidOut(overlay)) {
-            setupAndShow();
+            showOverlay();
         } else {
             overlay.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
                 @Override
                 public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-                    setupAndShow();
                     overlay.removeOnLayoutChangeListener(this);
+                    showOverlay();
                 }
             });
         }
     }
 
-    private void setupAndShow() {
+    public boolean isShowing() {
+        return showing;
+    }
+
+    private void showOverlay() {
         // use reflection to get the last touched xy location
         try {
             getLastTouchPoint.invoke(viewRootImpl, touchPoint);
@@ -205,11 +200,42 @@ public class BubbleActions {
             return;
         }
 
-        showing = true;
-        overlay.showOverlay();
+        overlay.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+            @Override
+            public void onViewAttachedToWindow(View v) {
+            }
+
+            @Override
+            public void onViewDetachedFromWindow(View v) {
+                // As identified in SnackBar, if we receive this event, the user did not
+                // initiate it, so hide the overlay and remove it from its parent so the state is
+                // kept in sync
+                overlay.removeOnAttachStateChangeListener(this);
+                if (isShowing()) {
+                    removeOverlay();
+                }
+            }
+        });
+
+        overlay.getAnimateSetShow()
+                .setListener(new ViewPropertyAnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationStart(View view) {
+                        super.onAnimationStart(view);
+                        overlay.animateDimBackground();
+                    }
+
+                    @Override
+                    public void onAnimationEnd(View view) {
+                        super.onAnimationEnd(view);
+                        showing = true;
+                        overlay.startDrag();
+                    }
+                })
+                .start();
     }
 
-    void hideOverlay() {
+    void removeOverlay() {
         showing = false;
         root.removeView(overlay);
     }
@@ -220,30 +246,27 @@ public class BubbleActions {
             final int action = event.getAction();
 
             switch (action) {
-                case DragEvent.ACTION_DRAG_STARTED:
-                    return overlay.dragStarted(event);
-                case DragEvent.ACTION_DRAG_ENDED:
-                    return overlay.dragEnded(BubbleActions.this);
+                case DragEvent.ACTION_DROP:
+                    overlay.getAnimateSetHide()
+                            .setListener(new ViewPropertyAnimatorListenerAdapter() {
+                                @Override
+                                public void onAnimationStart(View view) {
+                                    super.onAnimationStart(view);
+                                    overlay.animateUndimBackground();
+                                }
+
+                                @Override
+                                public void onAnimationEnd(View view) {
+                                    super.onAnimationEnd(view);
+                                    removeOverlay();
+                                }
+                            })
+                            .start();
+                    return true;
             }
 
             return false;
         }
     };
-
-    /**
-     * An abstraction of the bubble action. Each action has a name, a drawable for the bubble,
-     * as well as a callback.
-     */
-    static class Action {
-        CharSequence actionName;
-        Drawable bubble;
-        Callback callback;
-
-        private Action(CharSequence actionName, Drawable bubble, Callback callback) {
-            this.actionName = actionName;
-            this.bubble = bubble;
-            this.callback = callback;
-        }
-    }
 
 }
