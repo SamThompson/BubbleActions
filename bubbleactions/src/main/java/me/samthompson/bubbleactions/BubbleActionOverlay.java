@@ -188,6 +188,12 @@ class BubbleActionOverlay extends FrameLayout {
     }
 
     void startDrag() {
+        // There is a bug in v17 and below where the text won't appear because it hasn't
+        // been measured properly
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            requestLayout();
+        }
+
         startDrag(dragData, dragShadowBuilder, null, 0);
     }
 
