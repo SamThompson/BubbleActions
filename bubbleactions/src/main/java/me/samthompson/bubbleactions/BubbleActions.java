@@ -117,9 +117,9 @@ public class BubbleActions {
      * feedback. Check out the sample app for an example of this. Actions are not limited to
      * circles.
      *
-     * @param actionName The label displayed above the bubble action
+     * @param actionName  The label displayed above the bubble action
      * @param drawableRes The content of the bubble action
-     * @param callback A callback run on the main thread when the action is selected
+     * @param callback    A callback run on the main thread when the action is selected
      * @return the BubbleActions instance that called this method
      */
     public BubbleActions addAction(CharSequence actionName, int drawableRes, Callback callback) {
@@ -134,8 +134,8 @@ public class BubbleActions {
      * details.
      *
      * @param actionName The label displayed above the bubble action
-     * @param drawable The content of the bubble action
-     * @param callback A callback run on the main thread when the action is selected
+     * @param drawable   The content of the bubble action
+     * @param callback   A callback run on the main thread when the action is selected
      * @return the BubbleActions instance that called this method
      */
     public BubbleActions addAction(CharSequence actionName, Drawable drawable, Callback callback) {
@@ -159,9 +159,9 @@ public class BubbleActions {
 
     /**
      * Show the bubble actions. Internally this will do 3 things:
-     *      1. Add the overlay to the root view
-     *      2. Use reflection to get the last touched xy location
-     *      3. Animate the overlay in
+     * 1. Add the overlay to the root view
+     * 2. Use reflection to get the last touched xy location
+     * 3. Animate the overlay in
      */
     public void show() {
         if (showing) {
