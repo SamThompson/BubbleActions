@@ -10,8 +10,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.sam.bubbleactions.R;
-
 /**
  * Created by sam on 11/2/15.
  */

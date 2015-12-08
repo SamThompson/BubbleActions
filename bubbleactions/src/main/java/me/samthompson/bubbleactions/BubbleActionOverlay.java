@@ -16,8 +16,6 @@ import android.view.animation.OvershootInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
-import com.sam.bubbleactions.R;
-
 /**
  *
  */
