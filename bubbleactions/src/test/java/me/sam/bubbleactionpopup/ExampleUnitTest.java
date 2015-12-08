@@ -1,4 +1,4 @@
-package com.sam.bubbleactions_sample;
+package me.sam.bubbleactionpopup;
 
 import org.junit.Test;
 

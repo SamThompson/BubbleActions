@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-import com.sam.bubbleactions_sample.R;
+import me.samthompson.bubbleactions_sample.R;
 
 public class MainActivity extends AppCompatActivity {
 
