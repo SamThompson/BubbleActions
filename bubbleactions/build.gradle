@@ -28,7 +28,7 @@ dependencies {
 }
 
 publish {
-    userOrg = 'st028'
+    userOrg = 'samthompson'
     groupId = GROUP_NAME
     artifactId = 'bubble-actions'
     version = VERSION_NAME
