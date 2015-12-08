@@ -222,6 +222,12 @@ public class BubbleActions {
         overlay.getAnimateSetShow()
                 .setListener(new ViewPropertyAnimatorListenerAdapter() {
                     @Override
+                    public void onAnimationStart(View view) {
+                        super.onAnimationStart(view);
+                        overlay.animateDimBackground();
+                    }
+
+                    @Override
                     public void onAnimationEnd(View view) {
                         super.onAnimationEnd(view);
                         showing = true;
@@ -242,17 +248,22 @@ public class BubbleActions {
             final int action = event.getAction();
 
             switch (action) {
-                case DragEvent.ACTION_DRAG_STARTED:
-                    return DragUtils.isDragForMe(event.getClipDescription().getLabel());
-                case DragEvent.ACTION_DRAG_ENDED:
+                case DragEvent.ACTION_DROP:
                     overlay.getAnimateSetHide()
                             .setListener(new ViewPropertyAnimatorListenerAdapter() {
+                                @Override
+                                public void onAnimationStart(View view) {
+                                    super.onAnimationStart(view);
+                                    overlay.animateUndimBackground();
+                                }
+
                                 @Override
                                 public void onAnimationEnd(View view) {
                                     super.onAnimationEnd(view);
                                     removeOverlay();
                                 }
-                            });
+                            })
+                            .start();
                     return true;
             }
 

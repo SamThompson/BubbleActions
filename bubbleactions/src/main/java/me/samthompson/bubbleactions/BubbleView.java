@@ -58,7 +58,7 @@ class BubbleView extends LinearLayout {
         public boolean onDrag(View v, DragEvent event) {
             final int action = event.getAction();
 
-            // Gotcha: you need to return true for drag end and start
+            // Gotcha: you need to return true for drag start
             switch (action) {
                 case DragEvent.ACTION_DRAG_STARTED:
                     return DragUtils.isDragForMe(event.getClipDescription().getLabel());
@@ -109,7 +109,9 @@ class BubbleView extends LinearLayout {
                     return true;
                 case DragEvent.ACTION_DROP:
                     callback.doAction();
-                    return true;
+
+                    // we return false here so we are notified in the BubbleActionOverlay
+                    return false;
             }
             return false;
         }

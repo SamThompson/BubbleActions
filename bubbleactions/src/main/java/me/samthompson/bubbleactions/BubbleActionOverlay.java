@@ -9,13 +9,9 @@ import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.support.v4.view.ViewCompat;
-import android.support.v4.view.ViewPropertyAnimatorCompat;
-import android.support.v4.view.ViewPropertyAnimatorListenerAdapter;
 import android.support.v7.view.ViewPropertyAnimatorCompatSet;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewPropertyAnimator;
 import android.view.animation.OvershootInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -195,18 +191,19 @@ class BubbleActionOverlay extends FrameLayout {
         startDrag(dragData, dragShadowBuilder, null, 0);
     }
 
+    void animateDimBackground() {
+        backgroundAnimator.start();
+    }
+
+    void animateUndimBackground() {
+        backgroundAnimator.reverse();
+    }
+
     ViewPropertyAnimatorCompatSet getAnimateSetShow() {
         ViewPropertyAnimatorCompatSet resultSet = new ViewPropertyAnimatorCompatSet();
         resultSet.play(ViewCompat.animate(bubbleActionIndicator)
                 .alpha(1f)
-                .setDuration(ANIMATION_DURATION)
-                .setListener(new ViewPropertyAnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationStart(View view) {
-                        super.onAnimationStart(view);
-                        backgroundAnimator.start();
-                    }
-                }));
+                .setDuration(ANIMATION_DURATION));
 
         for (int i = 0; i < numActions; i++) {
             final BubbleView child = (BubbleView) getChildAt(i + 1);
@@ -216,8 +213,7 @@ class BubbleActionOverlay extends FrameLayout {
                     .translationY(actionEndY[i])
                     .alpha(1f)
                     .setInterpolator(overshootInterpolator)
-                    .setDuration(ANIMATION_DURATION)
-                    .setListener(null));
+                    .setDuration(ANIMATION_DURATION));
         }
 
         return resultSet;
@@ -227,14 +223,7 @@ class BubbleActionOverlay extends FrameLayout {
         ViewPropertyAnimatorCompatSet resultSet = new ViewPropertyAnimatorCompatSet();
         resultSet.play(ViewCompat.animate(bubbleActionIndicator)
                 .alpha(0f)
-                .setDuration(ANIMATION_DURATION)
-                .setListener(new ViewPropertyAnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationStart(View view) {
-                        super.onAnimationStart(view);
-                        backgroundAnimator.reverse();
-                    }
-                }));
+                .setDuration(ANIMATION_DURATION));
 
         for (int i = 0; i < numActions; i++) {
             final BubbleView child = (BubbleView) getChildAt(i + 1);
@@ -243,13 +232,6 @@ class BubbleActionOverlay extends FrameLayout {
                     .translationY(actionStartY[i])
                     .alpha(0f)
                     .setInterpolator(null)
-                    .setListener(new ViewPropertyAnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(View view) {
-                            super.onAnimationEnd(view);
-                            child.resetAppearance();
-                        }
-                    })
                     .setDuration(ANIMATION_DURATION));
         }
 
