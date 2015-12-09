@@ -31,6 +31,7 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:23.1.1'
     compile 'com.android.support:cardview-v7:23.1.1'
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile 'com.facebook.stetho:stetho:1.2.0'
 }
 buildscript {
     ext.kotlin_version = '1.0.0-beta-2423'
