@@ -109,7 +109,7 @@ class BubbleView extends LinearLayout {
                     callback.doAction();
 
                     // we return false here so we are notified in the BubbleActionOverlay
-                    return false;
+                    return true;
             }
             return false;
         }

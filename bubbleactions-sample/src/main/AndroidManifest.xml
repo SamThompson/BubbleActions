@@ -3,6 +3,7 @@
     package="me.samthompson.bubbleactions_sample" >
 
     <application
+        android:name=".BubbleActionsApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/bubble_actions_app_name"

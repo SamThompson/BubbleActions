@@ -217,22 +217,7 @@ public final class BubbleActions {
             }
         });
 
-        overlay.getAnimateSetShow()
-                .setListener(new ViewPropertyAnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationStart(View view) {
-                        super.onAnimationStart(view);
-                        overlay.animateDimBackground();
-                    }
-
-                    @Override
-                    public void onAnimationEnd(View view) {
-                        super.onAnimationEnd(view);
-                        showing = true;
-                        overlay.startDrag();
-                    }
-                })
-                .start();
+        overlay.startDrag();
     }
 
     void removeOverlay() {
@@ -247,7 +232,29 @@ public final class BubbleActions {
             final int action = event.getAction();
 
             switch (action) {
-                case DragEvent.ACTION_DROP:
+                case DragEvent.ACTION_DRAG_STARTED:
+                    if (DragUtils.isDragForMe(event.getClipDescription().getLabel())) {
+                        overlay.getAnimateSetShow()
+                                .setListener(new ViewPropertyAnimatorListenerAdapter() {
+                                    @Override
+                                    public void onAnimationStart(View view) {
+                                        super.onAnimationStart(view);
+                                        overlay.animateDimBackground();
+                                    }
+
+                                    @Override
+                                    public void onAnimationEnd(View view) {
+                                        super.onAnimationEnd(view);
+                                        showing = true;
+                                    }
+                                })
+                                .start();
+                        return true;
+                    } else {
+                        return false;
+                    }
+
+                case DragEvent.ACTION_DRAG_ENDED:
                     overlay.getAnimateSetHide()
                             .setListener(new ViewPropertyAnimatorListenerAdapter() {
                                 @Override
