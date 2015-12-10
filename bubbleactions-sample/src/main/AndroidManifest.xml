@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="me.samthompson.bubbleactions_sample" >
+    package="me.samthompson.bubbleactions_sample">
 
     <application
         android:name=".BubbleActionsApplication"
@@ -8,18 +8,17 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/bubble_actions_app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme" >
-        <activity android:name="me.samthompson.bubbleactions_sample.MainActivity" >
+        android:theme="@style/AppTheme">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="me.samthompson.bubbleactions_sample.RecyclerViewActivity" >
-        </activity>
-        <activity android:name="me.samthompson.bubbleactions_sample.KotlinActivity" >
-        </activity>
+        <activity android:name=".RecyclerViewActivity"></activity>
+        <activity android:name=".KotlinActivity"></activity>
+        <activity android:name=".MenuActivity"></activity>
     </application>
 
 </manifest>

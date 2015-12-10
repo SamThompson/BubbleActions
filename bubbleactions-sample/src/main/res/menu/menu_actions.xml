@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/action_star"
+        android:icon="@drawable/bubble_star"
+        android:title="Star" />
+
+    <item android:id="@+id/action_share"
+        android:icon="@drawable/bubble_share"
+        android:title="Share" />
+
+    <item android:id="@+id/action_hide"
+        android:icon="@drawable/bubble_hide"
+        android:title="Hide" />
+
+</menu>
