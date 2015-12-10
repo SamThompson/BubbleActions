@@ -7,7 +7,11 @@ import android.graphics.drawable.Drawable;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPropertyAnimatorListenerAdapter;
+import android.support.v7.widget.PopupMenu;
 import android.view.DragEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -105,6 +109,46 @@ public final class BubbleActions {
      */
     public BubbleActions withIndicator(Drawable indicator) {
         this.indicator = indicator;
+        return this;
+    }
+
+    /**
+     * Set the actions using a menu xml resource. There are 3 requirements of the menu xml:
+     * 1. The menu cannot have more than 5 items,
+     * 2. Each menu item cannot have a submenu, and
+     * 3. Each menu item must have an icon, title, and an id
+     *
+     * @param menuRes  The resource id of the menu
+     * @param callback A callback to run on the main thread when an action is selected
+     * @return
+     */
+    public BubbleActions fromMenu(int menuRes, final MenuCallback callback) {
+        Menu menu = new PopupMenu(root.getContext(), null).getMenu();
+        MenuInflater inflater = new MenuInflater(root.getContext());
+        inflater.inflate(menuRes, menu);
+
+        if (menu.size() > BubbleActionOverlay.MAX_ACTIONS) {
+            throw new IllegalArgumentException(TAG + ": menu resource cannot have more than "
+                    + BubbleActionOverlay.MAX_ACTIONS + "actions.");
+        }
+
+        for (int i = 0; i < menu.size(); i++) {
+            final MenuItem item = menu.getItem(i);
+
+            if (item.hasSubMenu() || item.getIcon() == null || item.getTitle() == null || item.getItemId() == 0) {
+                throw new IllegalArgumentException(TAG + ": menu resource cannot have a submenu and " +
+                        "must have an icon, title, and id.");
+            }
+
+            final int id = item.getItemId();
+            addAction(item.getTitle(), item.getIcon(), new Callback() {
+                @Override
+                public void doAction() {
+                    callback.doAction(id);
+                }
+            });
+        }
+
         return this;
     }
 
