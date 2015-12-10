@@ -99,6 +99,55 @@ textView.setOnLongClickListener {
 }
 ```
 
+####Using a menu resource
+You can also use a menu resource to build BubbleActions. Here's the same example using a menu resource:
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/action_star"
+        android:icon="@drawable/bubble_star"
+        android:title="Star" />
+
+    <item android:id="@+id/action_share"
+        android:icon="@drawable/bubble_share"
+        android:title="Share" />
+
+    <item android:id="@+id/action_hide"
+        android:icon="@drawable/bubble_hide"
+        android:title="Hide" />
+
+</menu>
+```
+
+Note that each menu item must have an id, icon, and a title. Submenus are not supported.
+```java
+findViewById(R.id.text_view).setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(final View v) {
+                BubbleActions.on(v)
+                        .fromMenu(R.menu.menu_actions, new MenuCallback() {
+                            @Override
+                            public void doAction(int itemId) {
+                                switch (itemId) {
+                                    case R.id.action_star:
+                                        Toast.makeText(v.getContext(), "Star pressed!", Toast.LENGTH_SHORT).show();
+                                        break;
+                                    case R.id.action_share:
+                                        Toast.makeText(v.getContext(), "Share pressed!", Toast.LENGTH_SHORT).show();
+                                        break;
+                                    case R.id.action_hide:
+                                        Toast.makeText(v.getContext(), "Hide pressed!", Toast.LENGTH_SHORT).show();
+                                        break;
+                                }
+                            }
+                        })
+                        .show();
+                return true;
+            }
+        });
+```
+
 ####Changing the font
 Use a custom font? Have no fear! You can configure the typeface of the bubble actions by using `withTypeface` when
 you build your `BubbleActions`:
