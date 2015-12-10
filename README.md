@@ -23,7 +23,7 @@ repositories {
 
 In your project-level `build.gradle`:
 ```groovy
-compile 'me.samthompson:bubble-actions:1.2.1'
+compile 'me.samthompson:bubble-actions:1.2.2'
 ```
 
 
