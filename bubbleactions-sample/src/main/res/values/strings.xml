@@ -6,5 +6,5 @@
     <string name="kotlin_example">Bubble Actions in Kotlin</string>
     <string name="this_is_kotlin">This ui doesn\'t look very interesting, but it\'s actually Kotlin behind the scenes!</string>
     <string name="this_is_menu">This ui doesn\'t look very interesting either, but it uses a menu resource to generate the BubbleActions!</string>
-    <string name="menu_example">Menu example</string>
+    <string name="menu_example">BubbleActions with a menu</string>
 </resources>
