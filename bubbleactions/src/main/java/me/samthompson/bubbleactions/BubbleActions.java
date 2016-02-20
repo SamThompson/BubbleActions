@@ -4,6 +4,7 @@ import android.content.res.Resources;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPropertyAnimatorListenerAdapter;
@@ -278,6 +279,12 @@ public final class BubbleActions {
             switch (action) {
                 case DragEvent.ACTION_DRAG_STARTED:
                     if (DragUtils.isDragForMe(event.getClipDescription().getLabel())) {
+                        // There is a bug in v17 and below where the text won't appear because it hasn't
+                        // been measured properly
+                        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                            overlay.requestLayout();
+                        }
+
                         overlay.getAnimateSetShow()
                                 .setListener(new ViewPropertyAnimatorListenerAdapter() {
                                     @Override
