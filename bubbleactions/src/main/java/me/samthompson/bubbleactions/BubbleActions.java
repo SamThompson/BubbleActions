@@ -121,7 +121,7 @@ public final class BubbleActions {
      *
      * @param menuRes  The resource id of the menu
      * @param callback A callback to run on the main thread when an action is selected
-     * @return
+     * @return the BubbleActions instance that called this method
      */
     public BubbleActions fromMenu(int menuRes, final MenuCallback callback) {
         Menu menu = new PopupMenu(root.getContext(), null).getMenu();
