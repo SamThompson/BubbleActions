@@ -1,12 +1,14 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
+    ext.kotlin_version = '1.0.4'
     repositories {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.5.0'
+        classpath 'com.android.tools.build:gradle:2.2.0'
         classpath 'com.novoda:bintray-release:0.3.4'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 
@@ -18,8 +20,8 @@ ext {
     GIT_URL = 'https://github.com/SamThompson/BubbleActions.git'
     BINTRAY_USER = 'samthompson'
     GROUP_NAME = 'me.samthompson'
-    COMPILE_SDK = 23
-    BUILD_TOOLS = '23.0.2'
+    COMPILE_SDK = 24
+    BUILD_TOOLS = '24.0.3'
     IS_UPLOADING = project.getGradle().startParameter.taskNames.any{it.contains('bintrayUpload')}
 }
 
