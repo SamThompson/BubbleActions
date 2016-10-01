@@ -4,21 +4,23 @@ import android.animation.ObjectAnimator;
 import android.animation.TypeEvaluator;
 import android.content.ClipData;
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.os.Build;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.view.ViewPropertyAnimatorCompatSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Interpolator;
 import android.view.animation.OvershootInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 /**
- *
+ * A view that implements an overlay that animates up to 5 circular icons radially
+ * around a fixed point
  */
 class BubbleActionOverlay extends FrameLayout {
 
@@ -61,13 +63,14 @@ class BubbleActionOverlay extends FrameLayout {
     private static final String TAG = BubbleActionOverlay.class.getSimpleName();
 
     private static final float OVERSHOOT_TENSION = 1.5f;
-    private static final int ANIMATION_DURATION = 150;
+    private static final long BASE_ANIMATION_DURATION = 150;
 
     private float[] actionStartX = new float[MAX_ACTIONS];
     private float[] actionStartY = new float[MAX_ACTIONS];
     private float[] actionEndX = new float[MAX_ACTIONS];
     private float[] actionEndY = new float[MAX_ACTIONS];
-    private OvershootInterpolator overshootInterpolator;
+    private Interpolator interpolator;
+    private long animationDuration;
     private ClipData dragData;
     private DragShadowBuilder dragShadowBuilder;
     private float startActionDistanceFromCenter;
@@ -90,12 +93,10 @@ class BubbleActionOverlay extends FrameLayout {
         bubbleActionIndicator.setAlpha(0f);
         addView(bubbleActionIndicator, -1);
 
-        overshootInterpolator = new OvershootInterpolator(OVERSHOOT_TENSION);
+        interpolator = new OvershootInterpolator(OVERSHOOT_TENSION);
 
-        Resources resources = getResources();
-
-        int transparentBackgroundColor = resources.getColor(R.color.bubble_actions_background_transparent);
-        int darkenedBackgroundColor = resources.getColor(R.color.bubble_actions_background_darkened);
+        int transparentBackgroundColor = ContextCompat.getColor(context, R.color.bubble_actions_background_transparent);
+        int darkenedBackgroundColor = ContextCompat.getColor(context, R.color.bubble_actions_background_darkened);
         setBackgroundColor(transparentBackgroundColor);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             backgroundAnimator = ObjectAnimator.ofArgb(this, "backgroundColor", transparentBackgroundColor, darkenedBackgroundColor);
@@ -103,7 +104,7 @@ class BubbleActionOverlay extends FrameLayout {
             backgroundAnimator = ObjectAnimator.ofObject(this, "backgroundColor", new BackgroundAlphaTypeEvaluator(), transparentBackgroundColor, darkenedBackgroundColor);
         }
 
-        backgroundAnimator.setDuration(ANIMATION_DURATION);
+        animationDuration = BASE_ANIMATION_DURATION;
 
         bubbleDimension = (int) getResources().getDimension(R.dimen.bubble_actions_indicator_dimension);
         startActionDistanceFromCenter = getResources().getDimension(R.dimen.bubble_actions_start_distance);
@@ -144,7 +145,16 @@ class BubbleActionOverlay extends FrameLayout {
         }
     }
 
+    void setInterpolator(Interpolator interpolator) {
+        this.interpolator = interpolator;
+    }
+
+    void setAnimationDuration(long animationDuration) {
+        this.animationDuration = animationDuration;
+    }
+
     void setupOverlay(float originX, float originY, BubbleActions bubbleActions) {
+        backgroundAnimator.setDuration(animationDuration);
         numActions = bubbleActions.numActions;
         if (numActions > MAX_ACTIONS) {
             throw new IllegalArgumentException(TAG + ": actions cannot have more than " + MAX_ACTIONS + " actions. ");
@@ -237,7 +247,7 @@ class BubbleActionOverlay extends FrameLayout {
         ViewPropertyAnimatorCompatSet resultSet = new ViewPropertyAnimatorCompatSet();
         resultSet.play(ViewCompat.animate(bubbleActionIndicator)
                 .alpha(1f)
-                .setDuration(ANIMATION_DURATION));
+                .setDuration(animationDuration));
 
         for (int i = 0; i < numActions; i++) {
             final BubbleView child = (BubbleView) getChildAt(i + 1);
@@ -246,8 +256,8 @@ class BubbleActionOverlay extends FrameLayout {
                     .translationX(actionEndX[i])
                     .translationY(actionEndY[i])
                     .alpha(1f)
-                    .setInterpolator(overshootInterpolator)
-                    .setDuration(ANIMATION_DURATION));
+                    .setInterpolator(interpolator)
+                    .setDuration(animationDuration));
         }
 
         return resultSet;
@@ -257,7 +267,7 @@ class BubbleActionOverlay extends FrameLayout {
         ViewPropertyAnimatorCompatSet resultSet = new ViewPropertyAnimatorCompatSet();
         resultSet.play(ViewCompat.animate(bubbleActionIndicator)
                 .alpha(0f)
-                .setDuration(ANIMATION_DURATION));
+                .setDuration(animationDuration));
 
         for (int i = 0; i < numActions; i++) {
             final BubbleView child = (BubbleView) getChildAt(i + 1);
@@ -266,7 +276,7 @@ class BubbleActionOverlay extends FrameLayout {
                     .translationY(actionStartY[i])
                     .alpha(0f)
                     .setInterpolator(null)
-                    .setDuration(ANIMATION_DURATION));
+                    .setDuration(animationDuration));
         }
 
         return resultSet;

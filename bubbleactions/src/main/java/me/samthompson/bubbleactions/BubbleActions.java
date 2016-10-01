@@ -15,6 +15,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Interpolator;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -110,6 +111,28 @@ public final class BubbleActions {
      */
     public BubbleActions withIndicator(Drawable indicator) {
         this.indicator = indicator;
+        return this;
+    }
+
+    /**
+     * Set the animation interpolator of the bubble translation
+     *
+     * @param interpolator interpolator to control the animation
+     * @return the BubbleActions instance that called this method
+     */
+    public BubbleActions withInterpolator(Interpolator interpolator) {
+        overlay.setInterpolator(interpolator);
+        return this;
+    }
+
+    /**
+     * Set the duration of the animate in/out of the bubbles
+     *
+     * @param duration duration of the animation
+     * @return
+     */
+    public BubbleActions withDuration(int duration) {
+        overlay.setAnimationDuration(duration);
         return this;
     }
 
