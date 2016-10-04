@@ -152,7 +152,8 @@ findViewById(R.id.text_view).setOnLongClickListener(new View.OnLongClickListener
 Use a custom font? Have no fear! You can configure the typeface of the bubble actions by using `withTypeface` when
 you build your `BubbleActions`:
 ```
-BubbleActions.on(myView).withTypeface(myFancyTypeface)
+BubbleActions.on(myView)
+    .withTypeface(/* your fancy typeface */)
     // ... add actions ...
 ```
 
@@ -165,6 +166,15 @@ BubbleActions.on(myView).withIndicator(R.drawable.my_fancy_indicator)
     // ... add actions ...
 ```
 
+####Setting animation duration and interpolator
+You can also customize the animation speed and the animation interpolator 
+of the bubbles by using `withDuration` and `withInterpolator`:
+```
+BubbleActions.on(myView)
+    .withDuration(/* your custom duration */)
+    .withInterpolator(/* your fancy interpolator */)
+    // ... add actions ...
+```
 
 ##License
 ```
