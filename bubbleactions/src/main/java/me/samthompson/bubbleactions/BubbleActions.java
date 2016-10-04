@@ -129,7 +129,7 @@ public final class BubbleActions {
      * Set the duration of the animate in/out of the bubbles
      *
      * @param duration duration of the animation
-     * @return
+     * @return the BubbleActionsInstance that called this method
      */
     public BubbleActions withDuration(int duration) {
         overlay.setAnimationDuration(duration);
