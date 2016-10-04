@@ -8,13 +8,13 @@ import me.samthompson.bubbleactions.BubbleActions
 /**
  * Created by sam on 11/28/15.
  */
-public class KotlinActivity : AppCompatActivity() {
+class KotlinActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_kotlin)
 
-        val textView = findViewById(R.id.text_view);
+        val textView = findViewById(R.id.text_view)
         textView.setOnLongClickListener {
             BubbleActions.on(textView)
                     .addAction("Star", R.drawable.bubble_star, {
