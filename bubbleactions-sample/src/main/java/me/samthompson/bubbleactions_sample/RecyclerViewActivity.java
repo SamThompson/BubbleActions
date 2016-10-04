@@ -33,7 +33,6 @@ public class RecyclerViewActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
-            holder.item = position;
             holder.textView.setText(R.string.long_press_me);
         }
 
@@ -45,13 +44,13 @@ public class RecyclerViewActivity extends AppCompatActivity {
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        int item;
         TextView textView;
 
         public ViewHolder(final View itemView) {
             super(itemView);
             textView = (TextView) itemView.findViewById(R.id.item_text);
 
+            final int index = getAdapterPosition();
             // on long click, show the bubble actions
             itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
@@ -60,19 +59,19 @@ public class RecyclerViewActivity extends AppCompatActivity {
                             .addAction("Star", R.drawable.bubble_star, new Callback() {
                                 @Override
                                 public void doAction() {
-                                    Toast.makeText(v.getContext(), "Star pressed on item " + item + "!", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(v.getContext(), "Star pressed on index " + index + "!", Toast.LENGTH_SHORT).show();
                                 }
                             })
                             .addAction("Share", R.drawable.bubble_share, new Callback() {
                                 @Override
                                 public void doAction() {
-                                    Toast.makeText(v.getContext(), "Share pressed on item " + item + "!", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(v.getContext(), "Share pressed on index " + index + "!", Toast.LENGTH_SHORT).show();
                                 }
                             })
                             .addAction("Hide", R.drawable.bubble_hide, new Callback() {
                                 @Override
                                 public void doAction() {
-                                    Toast.makeText(v.getContext(), "Hide pressed on item " + item + "!", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(v.getContext(), "Hide pressed on index " + index + "!", Toast.LENGTH_SHORT).show();
                                 }
                             })
                             .show();
