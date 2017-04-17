@@ -1,19 +1,19 @@
-#BubbleActions [ ![Download](https://api.bintray.com/packages/samthompson/maven/bubble-actions/images/download.svg) ](https://bintray.com/samthompson/maven/bubble-actions/_latestVersion) 
+# BubbleActions [ ![Download](https://api.bintray.com/packages/samthompson/maven/bubble-actions/images/download.svg) ](https://bintray.com/samthompson/maven/bubble-actions/_latestVersion) 
 
 Inspired by the Pinterest Android app, `BubbleActions` make it easy to perform actions 
 on ui elements by simply dragging your finger.
 
-##Screenshots
+## Screenshots
 1 | 2 | 3
 --- | --- | --- 
 ![1](http://i.imgur.com/jbI6Bay.gif) | ![2](http://i.imgur.com/YEtNBmn.gif)  | ![3](http://i.imgur.com/BKllyFY.gif)
 
 
-##Requirements and dependencies
+## Requirements and dependencies
 `BubbleActions` works with api level 11 and higher. It also is dependent on appcompat-v7.
 
 
-##Gradle
+## Gradle
 In your top-level `build.gradle`:
 ```groovy
 repositories {
@@ -27,9 +27,9 @@ compile 'me.samthompson:bubble-actions:1.3.0'
 ```
 
 
-##Samples
+## Samples
 
-####Building BubbleActions
+#### Building BubbleActions
 `BubbleActions` are built using a [fluent interface](https://en.wikipedia.org/wiki/Fluent_interface) 
 (similar to SnackBar) and supports adding up to 5 actions. You can build `BubbleActions` like this:
 ```java
@@ -49,7 +49,7 @@ Every action in BubbleActions has 3 parts:
 2. a drawable for the bubble itself, and
 3. a callback that will be executed on the main thread when the user lifts their finger over that action.
 
-####Basic example
+#### Basic example
 In the activity we set a long click listener to show the `BubbleActions`:
 ```java
 findViewById(R.id.my_view).setOnLongClickListener(new View.OnLongClickListener() {
@@ -79,7 +79,7 @@ findViewById(R.id.my_view).setOnLongClickListener(new View.OnLongClickListener()
     });
 ```
 
-####Kotlin example
+#### Kotlin example
 Here's the same example as above, translated to Kotlin:
 ```kotlin
 val textView = findViewById(R.id.text_view);
@@ -99,7 +99,7 @@ textView.setOnLongClickListener {
 }
 ```
 
-####Using a menu resource
+#### Using a menu resource
 You can also use a menu resource to build BubbleActions. Here's the same example using a menu resource:
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -148,7 +148,7 @@ findViewById(R.id.text_view).setOnLongClickListener(new View.OnLongClickListener
         });
 ```
 
-####Changing the font
+#### Changing the font
 Use a custom font? Have no fear! You can configure the typeface of the bubble actions by using `withTypeface` when
 you build your `BubbleActions`:
 ```
@@ -157,7 +157,7 @@ BubbleActions.on(myView)
     // ... add actions ...
 ```
 
-####Changing the indicator
+#### Changing the indicator
 The default indicator is a semi-transparent circle that appears where the last down touch event occurred before
 showing the `BubbleActions`. You can change this indicator by using the `withIndicator` method 
 when you build your `BubbleActions`:
@@ -166,7 +166,7 @@ BubbleActions.on(myView).withIndicator(R.drawable.my_fancy_indicator)
     // ... add actions ...
 ```
 
-####Setting animation duration and interpolator
+#### Setting animation duration and interpolator
 You can also customize the animation speed and the animation interpolator 
 of the bubbles by using `withDuration` and `withInterpolator`:
 ```
@@ -176,7 +176,7 @@ BubbleActions.on(myView)
     // ... add actions ...
 ```
 
-##License
+## License
 ```
 Copyright 2015 Sam Thompson
 
